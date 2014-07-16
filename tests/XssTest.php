@@ -127,6 +127,33 @@ EOT;
         }
     }
 
+    public function testPhantomJS() {
+        $xss = $this->provideXss();
+
+        $result = '';
+        foreach ($xss as $key => $str) {
+            $filtered = Htmlawed::filter($str[0]);
+            $result .= '<h2>'.htmlspecialchars($key)."</h2>\n<div>$filtered</div>\n\n";
+        }
+
+        $result = <<<HTML
+<html>
+<body>
+<h1>Filtered XSS</h1>
+$result
+</body>
+</html>
+HTML;
+
+        file_put_contents(__DIR__.'/fixtures/filtered.html', $result);
+
+        chdir(__DIR__.'/fixtures');
+        exec('phantomjs phantom.js', $output, $resultCode);
+
+        $this->assertSame(0, $resultCode, "Phantomjs failed.");
+        $this->assertSame(['Loading', 'Loaded'], $output);
+    }
+
     /**
      * Provide some htmlawed configs.
      *

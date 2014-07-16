@@ -2,3 +2,4 @@
 .idea/
 composer.lock
 coverage.clover
+tests/fixtures/filtered.html
