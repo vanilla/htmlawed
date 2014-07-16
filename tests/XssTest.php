@@ -105,25 +105,8 @@ EOT;
      */
     public function provideConfigs() {
         $result = [
+            'default' => [null, null],
             'safe' => [['safe' => 1], ''],
-        ];
-
-        $result['vanilla'] = [
-            [
-                'anti_link_spam' => ['`.`', ''],
-                'comment' => 1,
-                'cdata' => 3,
-                'css_expression' => 1,
-                'deny_attribute' => 'on*',
-                'unique_ids' => 0,
-                'elements' => '*-applet-form-input-textarea-iframe-script-style-embed-object',
-                'keep_bad' => 0,
-                'schemes' => 'classid:clsid; href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, telnet; style: nil; *:file, http, https', // clsid allowed in class
-                'valid_xhtml' => 0,
-                'direct_list_nest' => 1,
-                'balance' => 1
-            ],
-            'object=-classid-type, -codebase; embed=type(oneof=application/x-shockwave-flash)'
         ];
 
         return $result;
