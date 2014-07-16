@@ -211,7 +211,7 @@ function hl_attrval($t, $p) {
 function hl_bal($t, $do = 1, $in = 'div') {
 // balance tags
 // by content
-    $cB = array('blockquote' => 1, 'form' => 1, 'map' => 1, 'noscript' => 1); // Block
+    $cB = array('form' => 1, 'map' => 1, 'noscript' => 1); // Block
     $cE = array('area' => 1, 'br' => 1, 'col' => 1, 'embed' => 1, 'hr' => 1, 'img' => 1, 'input' => 1, 'isindex' => 1, 'param' => 1); // Empty
     $cF = array('button' => 1, 'del' => 1, 'div' => 1, 'dd' => 1, 'fieldset' => 1, 'iframe' => 1, 'ins' => 1, 'li' => 1, 'noscript' => 1, 'object' => 1, 'td' => 1, 'th' => 1); // Flow; later context-wise dynamic move of ins & del to $cI
     $cI = array('a' => 1, 'abbr' => 1, 'acronym' => 1, 'address' => 1, 'b' => 1, 'bdo' => 1, 'big' => 1, 'caption' => 1, 'cite' => 1, 'code' => 1, 'dfn' => 1, 'dt' => 1, 'em' => 1, 'font' => 1, 'h1' => 1, 'h2' => 1, 'h3' => 1, 'h4' => 1, 'h5' => 1, 'h6' => 1, 'i' => 1, 'kbd' => 1, 'label' => 1, 'legend' => 1, 'p' => 1, 'pre' => 1, 'q' => 1, 'rb' => 1, 'rt' => 1, 's' => 1, 'samp' => 1, 'small' => 1, 'span' => 1, 'strike' => 1, 'strong' => 1, 'sub' => 1, 'sup' => 1, 'tt' => 1, 'u' => 1, 'var' => 1); // Inline
