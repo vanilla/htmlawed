@@ -2,7 +2,7 @@
 /**
  * @author Todd Burry <todd@vanillaforums.com>
  * @copyright 2009-2014 Vanilla Forums Inc.
- * @license MIT
+ * @license LGPL-3.0
  */
 
 namespace Htmlawed\Tests;

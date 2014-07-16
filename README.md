@@ -40,8 +40,6 @@ echo Htmlawed::filter('<h1>Hello world!');
 
 echo Htmlawed::filter('<i>nothing to see</i><script>alert("xss")</script>')
 // Outputs: '<i>nothing to see</i>alert("xss")'
-
-//
 ```
 
 Configs and Specs
