@@ -5,9 +5,9 @@
  * @license LGPL-3.0
  */
 
-namespace Htmlawed;
-
-
+/**
+ * A class wrapper for the htmLawed library.
+ */
 class Htmlawed {
     /// Methods ///
 
@@ -27,7 +27,6 @@ class Htmlawed {
     ];
 
     public static $defaultSpec = 'object=-classid-type, -codebase; embed=type(oneof=application/x-shockwave-flash)';
-
 
     /**
      * Filters a string of html with the htmLawed library.

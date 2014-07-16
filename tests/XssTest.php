@@ -7,7 +7,7 @@
 
 namespace Htmlawed\Tests;
 
-use Htmlawed\Htmlawed;
+use Htmlawed;
 use pQuery;
 
 /**

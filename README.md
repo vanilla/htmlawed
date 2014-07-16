@@ -33,8 +33,6 @@ Example
 -------
 
 ```php
-use Htmlawed\Htmlawed;
-
 echo Htmlawed::filter('<h1>Hello world!');
 // Outputs: '<h1>Hello world!</h1>'.
 
@@ -48,8 +46,6 @@ Configs and Specs
 The htmLawed filter takes two optional parameters: `$config` and `$spec`. This library provides sensible defaults to these parameters, but you can override them in `Htmlawed::filter()`.
 
 ```php
-use Htmlawed\Htmlawed;
-
 $xss = "<i>nothing to see <script>alert('xss')</script>";
 
 // Pass an empty config and spec for no filtering of malicious code.

@@ -15,9 +15,9 @@
         "tburry/pquery": "~1.0.1"
     },
     "autoload": {
-        "psr-4": {
-            "Htmlawed\\": "src"
-        }
+        "classmap": [
+            "src/Htmlawed.php"
+        ]
     },
     "autoload-def": {
         "psr-4": {
