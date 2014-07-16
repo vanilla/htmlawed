@@ -9,6 +9,12 @@ A PHP Labware internal utility; www.bioinformatics.org/phplabware/internal_utili
 See htmLawed_README.txt/htm
 */
 
+/**
+ * @param string $t
+ * @param int|array $C
+ * @param array|string $S
+ * @return string
+ */
 function htmLawed($t, $C = 1, $S = array()) {
     $C = is_array($C) ? $C : array();
     if (!empty($C['valid_xhtml'])) {

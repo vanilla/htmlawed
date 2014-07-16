@@ -26,7 +26,10 @@ class Htmlawed {
         'balance' => 1
     ];
 
-    public static $defaultSpec = 'object=-classid-type, -codebase; embed=type(oneof=application/x-shockwave-flash)';
+    public static $defaultSpec = [
+        'object=-classid-type, -codebase',
+        'embed=type(oneof=application/x-shockwave-flash)'
+    ];
 
     /**
      * Filters a string of html with the htmLawed library.
@@ -65,7 +68,7 @@ class Htmlawed {
      */
     public static function filterRSS($html) {
         $config = array(
-            'anti_link_spam' => array('`.`', ''),
+            'anti_link_spam' => ['`.`', ''],
             'comment' => 1,
             'cdata' => 3,
             'css_expression' => 1,
@@ -74,9 +77,9 @@ class Htmlawed {
             'keep_bad' => 0,
             'schemes' => 'classid:clsid; href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, telnet; style: nil; *:file, http, https', // clsid allowed in class
             'valid_xml' => 2,
-            'anti_link_spam' => array('`.`', '')
+            'balance' => 1
         );
-        $spec = 'object=-classid-type, -codebase; embed=type(oneof=application/x-shockwave-flash)';
+        $spec = static::$defaultSpec;
 
         $result = static::filter($html, $config, $spec);
 
