@@ -1,0 +1,24 @@
+{
+    "name": "vanilla/htmlawed",
+    "description": "A composer wrapper for the htmLawed library to purify & filter HTML.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Todd Burry",
+            "email": "todd@vanillaforums.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Htmlawed\\": "src"
+        }
+    },
+    "autoload-def": {
+        "psr-4": {
+            "Htmlawed\\Test\\": "tests"
+        }
+    }
+}
