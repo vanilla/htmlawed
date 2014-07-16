@@ -13,9 +13,10 @@ matrix:
         - php: hhvm-nightly
 
 install:
+    - composer self-update
     - composer install
 
-script: phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
+script: phpunit -c tests/phpunit.xml.dist --coverage-clover=coverage.clover
 
 after_script:
     - wget https://scrutinizer-ci.com/ocular.phar
