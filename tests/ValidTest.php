@@ -24,6 +24,15 @@ class ValidTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($html, $filtered);
     }
 
+    public function testSpanStrip() {
+        $html = <<<HTML
+<span><h1>Don't strip this h1!</h1></span>
+HTML;
+
+        $filtered = Htmlawed::filter($html);
+        $expected = '<h1>Don\'t strip this h1!</h1>';
+        $this->assertSame($expected, $filtered);
+    }
 
     public function provideValid() {
         $paths = glob(__DIR__.'/fixtures/valid/*.html');

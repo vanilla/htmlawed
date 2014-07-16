@@ -365,10 +365,12 @@ function hl_bal($t, $do = 1, $in = 'div') {
                 }
                 continue;
             }
-            if (!isset($cE[$e])) {
-                $q[] = $e;
+            if ($e !== 'span' || !empty($a)) {
+                if (!isset($cE[$e])) {
+                    $q[] = $e;
+                }
+                echo '<', $e, $a, '>';
             }
-            echo '<', $e, $a, '>';
             unset($e);
             continue;
         }
