@@ -62,3 +62,17 @@ echo Htmlawed::filterRSS('<html><body><h1>Hello world!</h1></body></html>');
 ```
 
 See the [htmLawed documentation](http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s2.2) for the full list of options.
+
+Differences in Vanilla's version of Htmlawed
+--------------------------------------------
+
+We try and use the most recent version of htmLawed with as few changes as possible so that bug fixes and security
+releases can be merged from the main project. However, We've made a few changes in the source code.
+
+* Balance tags (hl_bal) before validating tags (hl_tag). We found some cases where an unbalanced script tag would not
+  get removed and this addresses that issue.
+* Don't add an extra `<div>` inside of `<blockquote>` tags.
+* Remove naked `<span>`.
+* Change indentation from 1 space to 4 spaces.
+
+*If the original author of htmLawed wants to make any of these changes upstream please get in contact with support@vanillaforums.com.*
