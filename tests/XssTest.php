@@ -39,7 +39,11 @@ class XssTest extends \PHPUnit_Framework_TestCase {
 <a href="<script foo=''">alert('xss')</a>
 EOT;
 
-        $filtered = Htmlawed::filter($str, $config, $spec);
+        if ($config === 'rss') {
+            $filtered = Htmlawed::filterRSS($str);
+        } else {
+            $filtered = Htmlawed::filter($str, $config, $spec);
+        }
 
         $this->assertNoScript($filtered);
     }
@@ -53,8 +57,16 @@ EOT;
      * @dataProvider provideXss
      */
     public function testIdempotence($str, $config = [], $spec = '') {
-        $filtered = Htmlawed::filter($str, $config, $spec);
-        $filteredAgain = Htmlawed::filter($filtered, $config, $spec);
+        if ($config === 'rss') {
+            $filtered = Htmlawed::filterRSS($str);
+        } else {
+            $filtered = Htmlawed::filter($str, $config, $spec);
+        }
+        if ($config === 'rss') {
+            $filteredAgain = Htmlawed::filterRSS($filtered);
+        } else {
+            $filteredAgain = Htmlawed::filter($filtered, $config, $spec);
+        }
         $this->assertEquals($filtered, $filteredAgain);
     }
 
@@ -67,7 +79,11 @@ EOT;
      * @dataProvider provideXss
      */
     public function testNoScript($str, $config = [], $spec = '') {
-        $filtered = Htmlawed::filter($str, $config, $spec);
+        if ($config === 'rss') {
+            $filtered = Htmlawed::filterRSS($str);
+        } else {
+            $filtered = Htmlawed::filter($str, $config, $spec);
+        }
         $this->assertNoScript($filtered);
     }
 
@@ -80,10 +96,15 @@ EOT;
      * @dataProvider provideXss
      */
     public function testDom($str, $config = [], $spec = '') {
-        $filtered = Htmlawed::filter($str, $config, $spec);
+        if ($config === 'rss') {
+            $filtered = Htmlawed::filterRSS($str);
+        } else {
+            $filtered = Htmlawed::filter($str, $config, $spec);
+        }
 
         $q = pQuery::parseStr($filtered);
 
+        // Test event handlers.
         $ons = ['onclick', 'onmouseover', 'onload', 'onerror'];
         foreach ($ons as $on) {
             if (strpos($filtered, $on) !== false) {
@@ -92,9 +113,17 @@ EOT;
             }
         }
 
+        // Test bad elements.
         $elems = ['applet', 'form', 'input', 'textarea', 'iframe', 'script', 'style', 'embed', 'object'];
         foreach ($elems as $elem) {
             $this->assertSame(0, $q->query($elem)->count(), "Filtered still has an $elem element.");
+        }
+
+        // Look for javascript: hrefs.
+        foreach ($q->query('*[href]') as $node) {
+            /* @var pQuery\IQuery $node */
+            $href = $node->attr('href');
+            $this->assertStringStartsNotWith('javascript', $href);
         }
     }
 
@@ -107,6 +136,7 @@ EOT;
         $result = [
             'default' => [null, null],
             'safe' => [['safe' => 1], ''],
+            'rss' => ['rss', null]
         ];
 
         return $result;
