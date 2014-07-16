@@ -1,4 +1,7 @@
 .gitattributes export-ignore
 .gitignore export-ignore
+src/htmLawed/htmLawed_README.* export-ignore
+src/htmLawed/htmLawed_TESTCASE.txt export-ignore
 src/htmLawed/htmLawedTest.php export-ignore
+src/htmLawed/README.md export-ignore
 tests export-ignore

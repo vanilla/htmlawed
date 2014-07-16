@@ -13,7 +13,6 @@ matrix:
         - php: hhvm-nightly
 
 install:
-    - composer self-update
     - composer install
 
 script: phpunit -c tests/phpunit.xml.dist --coverage-clover=coverage.clover
