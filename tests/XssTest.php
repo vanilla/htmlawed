@@ -8,9 +8,18 @@
 namespace Htmlawed\Tests;
 
 use Htmlawed\Htmlawed;
+use pQuery;
 
-
+/**
+ * Test some xss strings.
+ */
 class XssTest extends \PHPUnit_Framework_TestCase {
+    /**
+     * Assert that a string doesn't have a script tag.
+     *
+     * @param string $str The string to test.
+     * @param string $message The error message if a script tag is found.
+     */
     public function assertNoScript($str, $message = '') {
         self::assertFalse(
             (bool)preg_match('`<\s*/?\s*script`i', $str),
@@ -25,20 +34,22 @@ class XssTest extends \PHPUnit_Framework_TestCase {
      * @param string $spec
      * @dataProvider provideConfigs
      */
-//    public function testScriptInHref($config = [], $spec = '') {
-//        $str = <<<EOT
-//<a href="<script foo=''">alert('xss')</a>
-//EOT;
-//
-//        $filtered = Htmlawed::filter($str, $config, $spec);
-//
-//        $this->assertNoScript($filtered);
-//    }
+    public function testScriptInHref($config = [], $spec = '') {
+        $str = <<<EOT
+<a href="<script foo=''">alert('xss')</a>
+EOT;
+
+        $filtered = Htmlawed::filter($str, $config, $spec);
+
+        $this->assertNoScript($filtered);
+    }
 
     /**
-     * @param string $str
-     * @param array $config
-     * @param string $spec
+     * Test that filtering a string twice returns the same strings.
+     *
+     * @param string $str The string to test.
+     * @param array $config The htmlawed config.
+     * @param string $spec The htmlawed spec.
      * @dataProvider provideXss
      */
     public function testIdempotence($str, $config = [], $spec = '') {
@@ -48,9 +59,11 @@ class XssTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @param string $str
-     * @param array $config
-     * @param string $spec
+     * Test that the xss test strings don't have a script tag.
+     *
+     * @param string $str The string to test.
+     * @param array $config The htmlawed config.
+     * @param string $spec The htmlawed spec.
      * @dataProvider provideXss
      */
     public function testNoScript($str, $config = [], $spec = '') {
@@ -58,6 +71,38 @@ class XssTest extends \PHPUnit_Framework_TestCase {
         $this->assertNoScript($filtered);
     }
 
+    /**
+     * Test the xss strings against a {@link pQuery} dom construction.
+     *
+     * @param string $str The string to test.
+     * @param array $config The htmlawed config.
+     * @param string $spec The htmlawed spec.
+     * @dataProvider provideXss
+     */
+    public function testDom($str, $config = [], $spec = '') {
+        $filtered = Htmlawed::filter($str, $config, $spec);
+
+        $q = pQuery::parseStr($filtered);
+
+        $ons = ['onclick', 'onmouseover', 'onload', 'onerror'];
+        foreach ($ons as $on) {
+            if (strpos($filtered, $on) !== false) {
+                $elems = $q->query("*[$on]");
+                $this->assertSame(0, $elems->count(), "Filtered still has an $on attribute.");
+            }
+        }
+
+        $elems = ['applet', 'form', 'input', 'textarea', 'iframe', 'script', 'style', 'embed', 'object'];
+        foreach ($elems as $elem) {
+            $this->assertSame(0, $q->query($elem)->count(), "Filtered still has an $elem element.");
+        }
+    }
+
+    /**
+     * Provide some htmlawed configs.
+     *
+     * @return array Returns the configs.
+     */
     public function provideConfigs() {
         $result = [
             'safe' => [['safe' => 1], ''],
@@ -84,6 +129,13 @@ class XssTest extends \PHPUnit_Framework_TestCase {
         return $result;
     }
 
+    /**
+     * Combine two providers into one.
+     *
+     * @param callable $a The first provider.
+     * @param callable $b The second provider.
+     * @return array Returns the combined providers.
+     */
     protected function combineProviders(callable $a, callable $b) {
         $a_items = call_user_func($a);
         $b_items = call_user_func($b);
@@ -97,14 +149,29 @@ class XssTest extends \PHPUnit_Framework_TestCase {
         return $result;
     }
 
+    /**
+     * Provide all the xss strings.
+     *
+     * @return array Returns an array of xss strings.
+     */
     public function provideXss() {
         return array_merge($this->provideRSnake(), $this->provideEvasion());
     }
 
+    /**
+     * Provide the RSnake strings.
+     *
+     * @return array Returns the RSnake strings.
+     */
     public function provideRSnake() {
         return $this->combineProviders([$this, 'provideRSnakeTests'], [$this, 'provideConfigs']);
     }
 
+    /**
+     * Provide the xss evasion strings.
+     *
+     * @return array Returns the xss evasion strings.
+     */
     public function provideEvasion() {
         $result = $this->combineProviders([$this, 'provideEvasionTests'], [$this, 'provideConfigs']);
         return $result;

@@ -11,6 +11,9 @@
     "require": {
         "php": ">=5.4.0"
     },
+    "require-dev": {
+        "tburry/pquery": "~1.0.1"
+    },
     "autoload": {
         "psr-4": {
             "Htmlawed\\": "src"

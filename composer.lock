@@ -1,0 +1,70 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "e93d86d8090a656e363f7db8fd620bcb",
+    "packages": [],
+    "packages-dev": [
+        {
+            "name": "tburry/pquery",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tburry/pquery.git",
+                "reference": "3e5592fb1874b36543616eac7b2d4e278ff8f7ba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tburry/pquery/zipball/3e5592fb1874b36543616eac7b2d4e278ff8f7ba",
+                "reference": "3e5592fb1874b36543616eac7b2d4e278ff8f7ba",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "htmlawed/htmlawed": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "IQuery.php",
+                    "gan_formatter.php",
+                    "gan_node_html.php",
+                    "gan_parser_html.php",
+                    "gan_selector_html.php",
+                    "gan_tokenizer.php",
+                    "gan_xml2array.php",
+                    "pQuery.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Todd Burry",
+                    "email": "todd@vanillaforums.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A jQuery like html dom parser written in php.",
+            "keywords": [
+                "dom",
+                "ganon",
+                "php"
+            ],
+            "time": "2014-01-08 03:25:59"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "platform": {
+        "php": ">=5.4.0"
+    },
+    "platform-dev": []
+}
