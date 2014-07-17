@@ -127,7 +127,16 @@ EOT;
         }
     }
 
+    /**
+     * Test the filtered xss attack vectors with phantomjs.
+     */
     public function testPhantomJS() {
+        // Check for phantomjs first.
+        exec('phantomjs --version', $version, $resultCode);
+        if ($resultCode !== 0) {
+            $this->markTestSkipped("PhantomJs not installed.");
+        }
+
         $xss = $this->provideXss();
 
         $result = '';

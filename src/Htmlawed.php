@@ -35,8 +35,8 @@ class Htmlawed {
      * Filters a string of html with the htmLawed library.
      *
      * @param string $html The text to filter.
-     * @param array $config Config settings for the array.
-     * @param string $spec A specification to further limit the allowed attribute values in the html.
+     * @param array|null $config Config settings for the array.
+     * @param string|array|null $spec A specification to further limit the allowed attribute values in the html.
      * @return string Returns the filtered html.
      * @see http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm
      */
