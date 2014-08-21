@@ -7,6 +7,7 @@ htmLawed
 ![LGPL-3.0](https://img.shields.io/packagist/l/vanilla/htmlawed.svg?style=flat)
 
 A composer wrapper for the [htmLawed](http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/) library to purify &amp; filter HTML.
+Tested with [PHPUnit](http://phpunit.de/) and [PhantomJS](http://phantomjs.org/).
 
 Why use htmLawed?
 -----------------

@@ -1,6 +1,6 @@
 {
     "name": "vanilla/htmlawed",
-    "description": "A composer wrapper for the htmLawed library to purify & filter HTML.",
+    "description": "A composer wrapper for the htmLawed library to purify & filter HTML. Tested with PHPUnit and PhantomJS!",
     "license": "LGPL-3.0",
     "authors": [
         {
@@ -19,7 +19,7 @@
             "src/Htmlawed.php"
         ]
     },
-    "autoload-def": {
+    "autoload-dev": {
         "psr-4": {
             "Htmlawed\\Test\\": "tests"
         }

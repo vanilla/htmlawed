@@ -28,6 +28,21 @@ class XssTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
+     * Run a snippet of html with phantomjs.
+     *
+     * @param string $html The html to run.
+     * @param array &$result The result of the execution.
+     * @param int $resultCode The result code of the execution.
+     * @see exec()
+     */
+    protected function runPhantomJs($html, &$result = null, &$resultCode = null) {
+        file_put_contents(__DIR__.'/fixtures/phantomjs.html', $html);
+
+        chdir(__DIR__.'/fixtures');
+        exec('phantomjs phantom.js', $result, $resultCode);
+    }
+
+    /**
      * Test a malformed href including a script element.
      *
      * @param array $config
@@ -128,15 +143,34 @@ EOT;
     }
 
     /**
-     * Test the filtered xss attack vectors with phantomjs.
+     * Test to make sure that the phantomjs tests can even work.
      */
-    public function testPhantomJS() {
+    public function testPhantomJs() {
         // Check for phantomjs first.
         exec('phantomjs --version', $version, $resultCode);
         if ($resultCode !== 0) {
             $this->markTestSkipped("PhantomJs not installed.");
         }
 
+        $xss = <<<XSS
+<html>
+<body>
+<script>alert("xss")</script>
+</body>
+</html>
+XSS;
+
+        $this->runPhantomJs($xss, $result, $resultCode);
+        $this->assertSame(0, $resultCode);
+        $this->assertEquals(['Loading', 'ALERT: xss', 'Loaded'], $result);
+    }
+
+    /**
+     * Test the filtered xss attack vectors with phantomjs.
+     *
+     * @depends testPhantomJs
+     */
+    public function testFilterWithPhantomJs() {
         $xss = $this->provideXss();
 
         $result = '';
@@ -149,16 +183,13 @@ EOT;
 <html>
 <body>
 <h1>Filtered XSS</h1>
+
 $result
 </body>
 </html>
 HTML;
 
-        file_put_contents(__DIR__.'/fixtures/filtered.html', $result);
-
-        chdir(__DIR__.'/fixtures');
-        exec('phantomjs phantom.js', $output, $resultCode);
-
+        $this->runPhantomJs($result, $output, $resultCode);
         $this->assertSame(0, $resultCode, "Phantomjs failed.");
         $this->assertSame(['Loading', 'Loaded'], $output);
     }

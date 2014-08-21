@@ -11,7 +11,7 @@ page.onAlert = function(msg) {
 };
 
 console.log('Loading')
-page.open('filtered.html', function() {
+page.open('phantomjs.html', function() {
     console.log('Loaded');
     phantom.exit();
 });

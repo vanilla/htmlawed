@@ -1,3 +1,5 @@
+https://fuzzdb.googlecode.com/svn-history/r186/trunk/attack-payloads/xss/xss-rsnake.txt
+
 <SCRIPT>alert('XSS');</SCRIPT>
 
 '';!--"<XSS>=&{()}
