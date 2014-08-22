@@ -3,3 +3,4 @@
 composer.lock
 coverage.clover
 tests/fixtures/filtered.html
+tests/fixtures/phantomjs.html
