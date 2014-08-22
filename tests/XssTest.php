@@ -129,8 +129,16 @@ EOT;
         }
 
         // Test bad elements.
-        $elems = ['applet', 'form', 'input', 'textarea', 'iframe', 'script', 'style', 'embed', 'object'];
+        if (count($config) == 1 && !empty($config['safe'])) {
+            $elems = ['applet', 'iframe', 'script', 'embed', 'object'];
+        } else {
+            $elems = ['applet', 'form', 'input', 'textarea', 'iframe', 'script', 'style', 'embed', 'object'];
+        }
         foreach ($elems as $elem) {
+            $count = $q->query($elem)->count();
+            if ($count > 0) {
+                $foo = 'bar';
+            }
             $this->assertSame(0, $q->query($elem)->count(), "Filtered still has an $elem element.");
         }
 
