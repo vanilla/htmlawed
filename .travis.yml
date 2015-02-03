@@ -12,6 +12,10 @@ matrix:
     allow_failures:
         - php: hhvm-nightly
 
+branches:
+    except:
+        - upstream
+
 install:
     - composer install
 
