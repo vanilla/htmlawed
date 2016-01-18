@@ -89,4 +89,64 @@ class DefaultsTest extends \PHPUnit_Framework_TestCase {
             '<div onload="alert(\'XSS\')" onclick="die()">...</div>'
         );
     }
+
+    /**
+     * Allow lists to be nested by default.
+     */
+    public function testDirectNestList() {
+        $html = <<<HTML
+<ul>
+  <li>one</li>
+  <ol>
+    <li>two</li>
+  </ol>
+</ul>
+HTML;
+        $this->assertFiltered($html, $html);
+    }
+
+    /**
+     * Provide the elements for {@link testElements()}.
+     *
+     * @return array Returns an array for testing.
+     */
+    public function provideInvalidElements() {
+        $elements = explode('-', 'applet-button-form-input-textarea-iframe-script-style-embed-object');
+        $result = [];
+        foreach ($elements as $element) {
+            $result[$element] = [$element];
+        }
+        return $result;
+    }
+
+    /**
+     * Test that default invalid elements are removed.
+     *
+     * @param string $element The element that should be removed.
+     * @dataProvider provideInvalidElements
+     */
+    public function testInvalidElements($element) {
+        $html = "<div><$element>hi</$element></div>";
+        $this->assertFiltered('<div>hi</div>', $html);
+    }
+
+    /**
+     * Test to make sure `javascript:` isn't allowed in an href.
+     */
+    public function testBadScheme() {
+        $this->assertFiltered(
+            '<a rel="nofollow" href="denied:javascript:alert(\'xss\')">click</a>',
+            '<a href="javascript:alert(\'xss\')">click</a>'
+        );
+    }
+
+    /**
+     * Make sure duplicate ID checks aren't being done.
+     */
+    public function testAllowDuplicateIDs() {
+        $this->assertFiltered(
+            '<b id="x">one</b><i id="x">two</i>',
+            '<b id="x">one</b><i id="x">two</i>'
+        );
+    }
 }
