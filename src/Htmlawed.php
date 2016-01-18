@@ -13,17 +13,17 @@ class Htmlawed {
 
     public static $defaultConfig = [
         'anti_link_spam' => ['`.`', ''],
-        'comment' => 1,
+        'balance' => 1,
         'cdata' => 3,
-        'css_expression' => 1,
+        'comment' => 1,
+        'css_expression' => 0,
         'deny_attribute' => 'on*',
-        'unique_ids' => 0,
-        'elements' => '*-applet-form-input-textarea-iframe-script-style-embed-object',
+        'direct_list_nest' => 1,
+        'elements' => '*-applet-button-form-input-textarea-iframe-script-style-embed-object',
         'keep_bad' => 0,
         'schemes' => 'classid:clsid; href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, telnet; style: nil; *:file, http, https', // clsid allowed in class
+        'unique_ids' => 0,
         'valid_xhtml' => 0,
-        'direct_list_nest' => 1,
-        'balance' => 1
     ];
 
     public static $defaultSpec = [
