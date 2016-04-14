@@ -2,7 +2,7 @@
 
 /*
 htmLawedTest.php, 28 May 2013
-htmLawed 1.1.20, 9 June 2015
+htmLawed 1.1.22, 5 March 2016
 Copyright Santosh Patnaik
 Dual licensed with LGPL 3 and GPL 2+
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -136,8 +136,7 @@ function hexdump($d) {
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta name="description" content="htmLawed <?php echo hl_version(); ?> test page"/>
-    <style type="text/css"><!--
-        /*--><![CDATA[/*><!--*/
+    <style type="text/css"><!-- /*--><![CDATA[/*><!--*/
         a, a.resizer {
             text-decoration: none;
         }
@@ -290,7 +289,9 @@ function hexdump($d) {
         <![CDATA[//><!-- 
         window.name = 'hlmain';
         function hl(i) {
-            <?php if(!$_hilite){echo 'return;'; }?>
+            <?php if (!$_hilite) {
+            echo 'return;';
+        }?>
             var e = document.getElementById(i);
             if (!e) {
                 return;
@@ -1106,7 +1107,6 @@ function hexdump($d) {
         <div id="inputF" style="display: block;">
 
             <input type="hidden" name="token" id="token" value="<?php echo $token; ?>"/>
-
             <div><textarea id="text" class="textarea" name="text" rows="5" cols="100"
                            style="width: 100%;"><?php echo htmlspecialchars($_POST['text']); ?></textarea></div>
             <input type="submit" id="submitF" name="submitF" value="Process" style="float:left;"
