@@ -116,7 +116,7 @@ function hexdump($d) {
             $hexi = $ascii = '';
             $offset += 16;
             $j = 0;
-            // Add newline   
+            // Add newline
             if ($i !== $len - 1) {
                 echo "\n";
             }
@@ -286,7 +286,7 @@ function hexdump($d) {
         /*]]>*/
         --></style>
     <script type="text/javascript"><!--//-->
-        <![CDATA[//><!-- 
+        <![CDATA[//><!--
         window.name = 'hlmain';
         function hl(i) {
             <?php if (!$_hilite) {

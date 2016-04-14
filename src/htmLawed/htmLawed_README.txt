@@ -498,7 +498,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
   `Output`: '<input title="depth" value="10em" /><input title="depth" class="ic1" />'
 
   *Special characters*: The characters ';', ',', '/', '(', ')', '|', '~' and space have special meanings in the rules. Words in the rules that use such characters, or the characters themselves, should be `escaped` by enclosing in pairs of double-quotes ('"'). A back-tick ('`') can be used to escape a literal '"'. An example rule illustrating this is 'input=value(maxlen=30/match="/^\w/"/default="your `"ID`"")'.
-   
+
   *Attributes that accept multiple values*: If an attribute is 'accesskey', 'class', or 'rel', which can have multiple, space-separated values, htmLawed will parse the attribute value for such multiple values and will test each of them individually.
    
   *Note*: To deny an attribute for all elements for which it is legal, '$config["deny_attribute"]' (see section:- #3.4) can be used instead of '$spec'. Also, attributes can be allowed element-specifically through '$spec' while being denied globally through '$config["deny_attribute"]'. The 'hook_tag' parameter (section:- #3.4.9) can also be possibly used to implement a functionality like that achieved using '$spec' functionality.
@@ -1348,7 +1348,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
 
   1.1.22 - 5 March 2016. Improved testing of attribute value rules specified in '$spec'.
-  
+
   1.1.21 - 27 February 2016. Improvement and security fix in transforming 'font' element.
   
   1.1.20 - 9 June 2015. Fix for a potential security vulnerability arising from unescaped double-quote character in single-quoted attribute value of some deprecated elements when tag transformation is enabled; recognition for non-(HTML4) standard 'allowfullscreen' attribute of 'iframe.'
