@@ -17,7 +17,7 @@ class Htmlawed {
         'cdata' => 3,
         'comment' => 1,
         'css_expression' => 0,
-        'deny_attribute' => 'on*',
+        'deny_attribute' => 'on*,style',
         'direct_list_nest' => 1,
         'elements' => '*-applet-button-form-input-textarea-iframe-script-style-embed-object',
         'keep_bad' => 0,
