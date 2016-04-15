@@ -9,7 +9,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="../vendor/autoload.php"
+         bootstrap="vendor/autoload.php"
         >
   <php>
     <ini name="intl.default_locale" value="en"/>
@@ -19,15 +19,15 @@
 
   <testsuites>
     <testsuite name="htmLawed Test Suite">
-      <directory suffix="Test.php">.</directory>
+      <directory suffix="Test.php">tests</directory>
     </testsuite>
   </testsuites>
 
   <filter>
     <whitelist>
-      <directory>../src/</directory>
+      <directory>src/</directory>
       <exclude>
-        <directory>.</directory>
+        <directory>tests</directory>
       </exclude>
     </whitelist>
   </filter>
