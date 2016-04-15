@@ -76,7 +76,9 @@ class DefaultsTest extends \PHPUnit_Framework_TestCase {
         $html = '<span style="expression(alert(\'XSS\'))">foo</span>';
         $expected = '<span style=" (alert(\'XSS\'))">foo</span>';
 
-        $filtered = Htmlawed::filter($html);
+        $config = Htmlawed::$defaultConfig;
+        $config['deny_attribute'] = 'on*';
+        $filtered = Htmlawed::filter($html, $config);
         $this->assertSame($expected, $filtered);
     }
 
