@@ -19,9 +19,13 @@ install:
     - composer install -o
     - |
       if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then
-          composer require "phpunit/phpunit=5.7.*"
+          composer require "phpunit/phpunit=~5.7"
       else
-          composer require "phpunit/phpunit=4.8.*"
+          if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then
+              composer require "phpunit/phpunit=~5"
+          else
+              composer require "phpunit/phpunit=~4.8"
+          fi
       fi
 
 script: ./vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
