@@ -1,9 +1,9 @@
 /*
-htmLawed_TESTCASE.txt, 19 January 2015
-htmLawed 1.1.19, 19 January 2015
+htmLawed_TESTCASE.txt, 11 February 2017
+To test htmLawed
 Copyright Santosh Patnaik
 Dual licensed with LGPL 3 and GPL 2+
-A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
+A PHP Labware internal utility - www.bioinformatics.org/phplabware/internal_utilities/htmLawed
 */
 
 This file has UTF-8-encoded text with both correct and incorrect/malformed HTML/XHTML code snippets to test htmLawed (test cases/samples). The entire text may also be used as a unit.
@@ -28,7 +28,7 @@ character encoding to Unicode/UTF-8
 <strong>Deprecated:</strong> <a id="id7" target="self" name="n">a</a>, <hr noshade="noshade" /><br />
 <strong>Casing:</strong> <a HREF=""></a><br />
 <strong>Custom:</strong> <img alt="image" my:data="portrait" /><br />
-<strong>Data-*:</strong> <a data-xml="x" data-xmnt="x" data-xmlnt="x" data-xmn:t="x" data-xmxm="x">a</a><br />
+<strong>Data-*:</strong> <a data-xml="x" data-xmnt="x" data-xmlnt="x" data-xmn:t="x" data-12="x"  data-רש="x" data-xmxm="x">a</a><br />
 <strong>Admin-restricted?:</strong> <a href="x" onclick="alert();"></a>
 
 <h6>Attribute values</h6>
@@ -372,7 +372,7 @@ na Alemanha.
 <h6>Tag transformation</h6>
 <strong>Font element intended as 'inline' element:</strong> <p><font color='red'>hi</font></p><br />
 <strong>Font element intended as 'block' element:</strong> <div><font color='red'><div>hi</div></font></div><br />
-<strong>Font element intended as 'block' element:</strong> <center><font color='red'><div>hi</div><div>QQQ</div></font></center><br />
+<strong>Font element intended as 'block' element:</strong> <center><font color='red' face="serif, 'Times'"><div>hi</div><div>QQQ</div></font></center><br />
 
 <h6>Tidy</h6>
 <strong>White-space handling:</strong> abc<em> def </em> ghi   abc <em>def</em> ghi
@@ -395,6 +395,8 @@ na Alemanha.
 <img src="java script:alert('xss');" /><br />
 <img
 src=&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#39;&#88;&#83;&#83;&#39;&#41; /><br />
+<font color='#FF6699"onmouseover="alert(1)//'>test</font>
+<font color='<img//onerror="alert`www.ptsecurity.com`"src=Psych0tr1a'>
 <div style="javascript:alert('xss');"></div><br />
 <div style="background-image:url(javascript:alert('xss'));"></div><br />
 <div style="background-image:url(&quot;javascript:alert('xss')&quot; );"></div><br />
