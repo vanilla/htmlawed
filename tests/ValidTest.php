@@ -43,5 +43,15 @@ HTML;
         }
         return $result;
     }
+
+    public function testEmptyParagraphStrip() {
+
+        // This gets balanced to <p></p><pre><code>Don't strip this code</code></pre>
+        $html = "<p><pre><code>Don't strip this code</code></pre></p>";
+
+        $filtered = Htmlawed::filter($html);
+        $expected = "<pre><code>Don't strip this code</code></pre>";
+        $this->assertSame($expected, $filtered);
+
+    }
 }
- 

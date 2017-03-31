@@ -55,7 +55,11 @@ class Htmlawed {
             $spec = static::$defaultSpec;
         }
 
-        return htmLawed($html, $config, $spec);
+        $filtered = htmLawed($html, $config, $spec);
+        // Replace empty paragraphs.
+        // Htmlawed balances <p><pre><code>Code</code></pre></p> into <p></p><pre><code>Code</code></pre>
+        $filtered = str_replace('<p></p>', null, $filtered);
+        return $filtered;
     }
 
 
@@ -86,4 +90,3 @@ class Htmlawed {
         return $result;
     }
 }
- 
