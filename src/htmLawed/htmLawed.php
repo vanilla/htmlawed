@@ -232,7 +232,7 @@ function hl_attrval($a, $t, $p) {
 function hl_bal($t, $do = 1, $in = 'div') {
 // balance tags
 // by content
-    $cB = array('form' => 1, 'map' => 1, 'noscript' => 1); // Block
+    $cB = array('blockquote' => 1, 'form' => 1, 'map' => 1, 'noscript' => 1); // Block
     $cE = array('area' => 1, 'br' => 1, 'col' => 1, 'command' => 1, 'embed' => 1, 'hr' => 1, 'img' => 1, 'input' => 1, 'isindex' => 1, 'keygen' => 1, 'link' => 1, 'meta' => 1, 'param' => 1, 'source' => 1, 'track' => 1, 'wbr' => 1); // Empty
     $cF = array('a' => 1, 'article' => 1, 'aside' => 1, 'audio' => 1, 'button' => 1, 'canvas' => 1, 'del' => 1, 'details' => 1, 'div' => 1, 'dd' => 1, 'fieldset' => 1, 'figure' => 1, 'footer' => 1, 'header' => 1, 'iframe' => 1, 'ins' => 1, 'li' => 1, 'main' => 1, 'menu' => 1, 'nav' => 1, 'noscript' => 1, 'object' => 1, 'section' => 1, 'style' => 1, 'td' => 1, 'th' => 1, 'video' => 1); // Flow; later context-wise dynamic move of ins & del to $cI
     $cI = array('abbr' => 1, 'acronym' => 1, 'address' => 1, 'b' => 1, 'bdi' => 1, 'bdo' => 1, 'big' => 1, 'caption' => 1, 'cite' => 1, 'code' => 1, 'data' => 1, 'datalist' => 1, 'dfn' => 1, 'dt' => 1, 'em' => 1, 'figcaption' => 1, 'font' => 1, 'h1' => 1, 'h2' => 1, 'h3' => 1, 'h4' => 1, 'h5' => 1, 'h6' => 1, 'hgroup' => 1, 'i' => 1, 'kbd' => 1, 'label' => 1, 'legend' => 1, 'mark' => 1, 'meter' => 1, 'output' => 1, 'p' => 1, 'pre' => 1, 'progress' => 1, 'q' => 1, 'rb' => 1, 'rt' => 1, 's' => 1, 'samp' => 1, 'small' => 1, 'span' => 1, 'strike' => 1, 'strong' => 1, 'sub' => 1, 'summary' => 1, 'sup' => 1, 'time' => 1, 'tt' => 1, 'u' => 1, 'var' => 1); // Inline
