@@ -858,6 +858,7 @@ function hl_tag($t) {
             if ($k == 'style' or !isset($aND[$k][$e])) {
                 continue;
             }
+            $v = str_replace(array('\\', ':', ';'), '', $v);
             if ($k == 'align') {
                 unset($a['align']);
                 if ($e == 'img' && ($v == 'left' or $v == 'right')) {
