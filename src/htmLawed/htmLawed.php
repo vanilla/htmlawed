@@ -1,7 +1,7 @@
 <?php
 
 /*
-htmLawed 1.2, 11 February 2017
+htmLawed 1.2.1, 15 May 2017
 Copyright Santosh Patnaik
 Dual licensed with LGPL 3 and GPL 2+
 A PHP Labware internal utility - www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -850,6 +850,7 @@ function hl_tag($t) {
             if ($k == 'style' or !isset($aND[$k][$e])) {
                 continue;
             }
+            $v = str_replace(array('\\', ':', ';'), '', $v);
             if ($k == 'align') {
                 unset($a['align']);
                 if ($e == 'img' && ($v == 'left' or $v == 'right')) {
@@ -1069,5 +1070,5 @@ function hl_tidy($t, $w, $p) {
 
 function hl_version() {
 // version
-    return '1.2';
+    return '1.2.1';
 }
