@@ -1,7 +1,7 @@
 <?php
 
 /*
-htmLawedTest.php, 15 May 2017
+htmLawedTest.php, 17 May 2017
 To test htmLawed
 Copyright Santosh Patnaik
 Dual licensed with LGPL 3 and GPL 2+
@@ -265,7 +265,7 @@ function sndProc2(){
  var i = document.getElementById('text2');
  if(!i){return;}
  i = i.value;
- var w = window.open('htmLawedTest.php?pre=1', 'hlprehtm');
+ var w = window.open('htmLawedTest.php?pre=1', 'hlposthtm');
  var f = document.createElement('form');
  f.enctype = 'application/x-www-form-urlencoded';
  f.method = 'post';
@@ -274,7 +274,7 @@ function sndProc2(){
  else{f.visibility = 'hidden';}
  f.innerHTML = '<p style="display:none;"><input style="display:none;" type="hidden" name="token" id="token" value="<?php echo $token; ?>" /><input style="display:none;" type="hidden" name="<?php echo htmlspecialchars($_sid); ?>" id="<?php echo htmlspecialchars($_sid); ?>" value="' + readCookie('<?php echo htmlspecialchars($_sid); ?>') + '" /></p>';
  f.action = 'htmLawedTest.php?pre=1';
- f.target = 'hlprehtm';
+ f.target = 'hlposthtm';
  f.method = 'post';
  var t = document.createElement('textarea');
  t.name = 'outputH';
