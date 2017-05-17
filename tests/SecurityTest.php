@@ -19,8 +19,8 @@ class SecurityTest extends \PHPUnit_Framework_TestCase {
      *
      */
     public function testDeprecatedAttributeInjection() {
-        $html = '<div align="center;display:block;"></div>';
-        $expected = '<div style="text-align: centerdisplayblock;"></div>';
+        $html = '<div align="1&#x3b; background&#x3a; red">dd</div>';
+        $expected = '<div style="text-align: 1x3b backgroundx3a red;">dd</div>';
 
         $filtered = Htmlawed::filter($html);
         $this->assertSame($expected, $filtered);
