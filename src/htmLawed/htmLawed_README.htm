@@ -111,8 +111,8 @@ span.totop a, span.totop a:visited {color: #6699cc;}
 
 <div id="body">
 <br />
-<div class="comment">htmLawed_README.txt, 17 May 2017<br />
-htmLawed 1.2.1.1, 17 May 2017<br />
+<div class="comment">htmLawed_README.txt, 25 May 2017<br />
+htmLawed 1.2.2, 25 May 2017<br />
 Copyright Santosh Patnaik<br />
 Dual licensed with LGPL 3 and GPL 2+<br />
 A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed">http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed</a>&#160;</div>
@@ -585,6 +585,8 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 &#160; <strong>Attributes that accept multiple values</strong>: If an attribute is <span class="term">accesskey</span>, <span class="term">class</span>, <span class="term">itemtype</span>&#160;or <span class="term">rel</span>, which can have multiple, space-separated values, or <span class="term">srcset</span>, which can have multiple, comma-separated values, htmLawed will parse the attribute value for such multiple values and will individually test each of them.<br />
 <br />
 &#160; <strong>Note</strong>: To deny an attribute for all elements for which it is legal, <span class="term">$config["deny_attribute"]</span>&#160;(see <a href="#s3.4">section 3.4</a>) can be used instead of <span class="term">$spec</span>. Also, attributes can be allowed element-specifically through <span class="term">$spec</span>&#160;while being denied globally through <span class="term">$config["deny_attribute"]</span>. The <span class="term">hook_tag</span>&#160;parameter (<a href="#s3.4.9">section 3.4.9</a>) can also be possibly used to implement a functionality like that achieved using <span class="term">$spec</span>&#160;functionality.<br />
+<br />
+&#160; <strong>Note</strong>: Attributes' specifications for an element may be set through multiple rules. In case of conflict, the attribute specification in the first rule will get precedence.<br />
 <br />
 &#160; <span class="term">$spec</span>&#160;can also be used to permit custom, non-standard attributes as well as custom rules for standard attributes. Thus, the following value of <span class="term">$spec</span>&#160;will permit the custom uses of the standard <span class="term">rel</span>&#160;attribute in <span class="term">input</span>&#160;(not permitted as per standards) and of a non-standard attribute, <span class="term">vFlag</span>, in <span class="term">img</span>.<br />
 <br />
@@ -1821,6 +1823,8 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 <br />
 &#160; <em>Version number - Release date. Notes</em><br />
 <br />
+&#160; 1.2.2 - 25 May 2017. Fix for a bug in parsing <span class="term">$spec</span>&#160;that got introduced in version 1.2; also, <span class="term">$spec</span>&#160;is now parsed to accommodate specifications for an HTML element when they are specified in multiple rules<br />
+<br />
 &#160; 1.2.1.1 - 17 May 2017. Fix for a potential security vulnerability in transformation of deprecated attributes<br />
 <br />
 &#160; 1.2.1 - 15 May 2017. Fix for a potential security vulnerability in transformation of deprecated attributes<br />
@@ -1970,7 +1974,7 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 <a name="s4.10" id="s4.10"></a><span class="item-no">4.10</span>&#160; Acknowledgements
 </h3><span class="totop"><a href="#peak">(to top)</a></span><br style="clear: both;" />
 <br />
-&#160; Nicholas Alipaz, Bryan Blakey, Pádraic Brady, Dac Chartrand, Ulf Harnhammer, Gareth Heyes, Hakre, Klaus Leithoff, Lukasz Pilorz, Shelley Powers, Psych0tr1a, Lincoln Russell, Tomas Sykorka, Harro Verton, Edward Yang, and many anonymous users.<br />
+&#160; Nicholas Alipaz, Bryan Blakey, Pádraic Brady, Dac Chartrand, Alexandre Chouinard, Ulf Harnhammer, Gareth Heyes, Hakre, Klaus Leithoff, Lukasz Pilorz, Shelley Powers, Psych0tr1a, Lincoln Russell, Tomas Sykorka, Harro Verton, Edward Yang, and many anonymous users.<br />
 <br />
 &#160; Thank you!<br />
 
@@ -2264,7 +2268,7 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 </div>
 </div>
 <br />
-<hr /><br /><br /><span class="subtle"><small>HTM version of <em><a href="htmLawed_README.txt">htmLawed_README.txt</a></em> generated on 17 May, 2017 using <a href="http://www.bioinformatics.org/phplabware/internal_utilities">rTxt2htm</a> from PHP Labware</small></span>
+<hr /><br /><br /><span class="subtle"><small>HTM version of <em><a href="htmLawed_README.txt">htmLawed_README.txt</a></em> generated on 25 May, 2017 using <a href="http://www.bioinformatics.org/phplabware/internal_utilities">rTxt2htm</a> from PHP Labware</small></span>
 </div><!-- ended div body -->
 </div><!-- ended div top -->
 </body>

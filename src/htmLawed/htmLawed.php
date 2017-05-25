@@ -1,7 +1,7 @@
 <?php
 
 /*
-htmLawed 1.2.1.1, 17 May 2017
+htmLawed 1.2.2, 25 May 2017
 Copyright Santosh Patnaik
 Dual licensed with LGPL 3 and GPL 2+
 A PHP Labware internal utility - www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -603,7 +603,7 @@ function hl_spec($t) {
         }
         $y = $n = array();
         foreach (explode(',', $a) as $v) {
-            if (!preg_match('`^([a-z][^=/()]+)(?:\((.*?)\))?`i', $v, $m)) {
+            if (!preg_match('`^([a-z:\-\*]+)(?:\((.*?)\))?`i', $v, $m)) {
                 continue;
             }
             if (($x = strtolower($m[1])) == '-*') {
@@ -640,10 +640,18 @@ function hl_spec($t) {
                 continue;
             }
             if (count($y)) {
-                $s[$v] = $y;
+                if (!isset($s[$v])) {
+                    $s[$v] = $y;
+                } else {
+                    $s[$v] = array_merge($s[$v], $y);
+                }
             }
             if (count($n)) {
-                $s[$v]['n'] = $n;
+                if (!isset($s[$v]['n'])) {
+                    $s[$v]['n'] = $n;
+                } else {
+                    $s[$v]['n'] = array_merge($s[$v]['n'], $n);
+                }
             }
         }
     }
@@ -1070,5 +1078,5 @@ function hl_tidy($t, $w, $p) {
 
 function hl_version() {
 // version
-    return '1.2.1.1';
+    return '1.2.2';
 }

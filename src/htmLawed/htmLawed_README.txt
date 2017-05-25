@@ -1,6 +1,6 @@
 /*
-htmLawed_README.txt, 17 May 2017
-htmLawed 1.2.1.1, 17 May 2017
+htmLawed_README.txt, 25 May 2017
+htmLawed 1.2.2, 25 May 2017
 Copyright Santosh Patnaik
 Dual licensed with LGPL 3 and GPL 2+
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -502,6 +502,8 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
   *Attributes that accept multiple values*: If an attribute is 'accesskey', 'class', 'itemtype' or 'rel', which can have multiple, space-separated values, or 'srcset', which can have multiple, comma-separated values, htmLawed will parse the attribute value for such multiple values and will individually test each of them.
    
   *Note*: To deny an attribute for all elements for which it is legal, '$config["deny_attribute"]' (see section:- #3.4) can be used instead of '$spec'. Also, attributes can be allowed element-specifically through '$spec' while being denied globally through '$config["deny_attribute"]'. The 'hook_tag' parameter (section:- #3.4.9) can also be possibly used to implement a functionality like that achieved using '$spec' functionality.
+  
+  *Note*: Attributes' specifications for an element may be set through multiple rules. In case of conflict, the attribute specification in the first rule will get precedence.
   
   '$spec' can also be used to permit custom, non-standard attributes as well as custom rules for standard attributes. Thus, the following value of '$spec' will permit the custom uses of the standard 'rel' attribute in 'input' (not permitted as per standards) and of a non-standard attribute, 'vFlag', in 'img'.
   
@@ -1366,6 +1368,8 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   `Version number - Release date. Notes`
   
+  1.2.2 - 25 May 2017. Fix for a bug in parsing '$spec' that got introduced in version 1.2; also, '$spec' is now parsed to accommodate specifications for an HTML element when they are specified in multiple rules
+  
   1.2.1.1 - 17 May 2017. Fix for a potential security vulnerability in transformation of deprecated attributes
   
   1.2.1 - 15 May 2017. Fix for a potential security vulnerability in transformation of deprecated attributes
@@ -1508,7 +1512,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 -- 4.10  Acknowledgements ------------------------------------------o
 
 
-  Nicholas Alipaz, Bryan Blakey, Pádraic Brady, Dac Chartrand, Ulf Harnhammer, Gareth Heyes, Hakre, Klaus Leithoff, Lukasz Pilorz, Shelley Powers, Psych0tr1a, Lincoln Russell, Tomas Sykorka, Harro Verton, Edward Yang, and many anonymous users.
+  Nicholas Alipaz, Bryan Blakey, Pádraic Brady, Dac Chartrand, Alexandre Chouinard, Ulf Harnhammer, Gareth Heyes, Hakre, Klaus Leithoff, Lukasz Pilorz, Shelley Powers, Psych0tr1a, Lincoln Russell, Tomas Sykorka, Harro Verton, Edward Yang, and many anonymous users.
 
   Thank you!
 
