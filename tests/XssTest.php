@@ -129,7 +129,7 @@ EOT;
         }
 
         // Test bad elements.
-        if (count($config) == 1 && !empty($config['safe'])) {
+        if (is_array($config) && count($config) == 1 && !empty($config['safe'])) {
             $elems = ['applet', 'iframe', 'script', 'embed', 'object'];
         } else {
             $elems = ['applet', 'form', 'input', 'textarea', 'iframe', 'script', 'style', 'embed', 'object'];
