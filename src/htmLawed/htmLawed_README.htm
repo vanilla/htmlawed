@@ -111,8 +111,8 @@ span.totop a, span.totop a:visited {color: #6699cc;}
 
 <div id="body">
 <br />
-<div class="comment">htmLawed_README.txt, 25 May 2017<br />
-htmLawed 1.2.2, 25 May 2017<br />
+<div class="comment">htmLawed_README.txt, 31 August 2017<br />
+htmLawed 1.2.4, 31 August 2017<br />
 Copyright Santosh Patnaik<br />
 Dual licensed with LGPL 3 and GPL 2+<br />
 A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed">http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed</a>&#160;</div>
@@ -751,7 +751,7 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 <br />
 &#160; * &#160;Named character entities must be properly cased. Thus, <span class="term">&amp;Lt;</span>&#160;or <span class="term">&amp;TILDE;</span>&#160;will not be recognized as entities and will be <em>neutralized</em>.<br />
 <br />
-&#160; * &#160;HTML comments should not be inside element tags (they can be between tags), and should begin with <span class="term">&lt;!--</span>&#160;and end with <span class="term">--&gt;</span>. Characters like <span class="term">&lt;</span>, <span class="term">&gt;</span>, and <span class="term">&amp;</span>&#160;may be allowed inside depending on <span class="term">$config</span>, but any <span class="term">--&gt;</span>&#160;inside should be put in as <span class="term">--&amp;gt;</span>. Any <span class="term">--</span>&#160;inside will be automatically converted to <span class="term">-</span>, and a space will be added before the comment delimiter <span class="term">--&gt;</span>.<br />
+&#160; * &#160;HTML comments should not be inside element tags (they can be between tags), and should begin with <span class="term">&lt;!--</span>&#160;and end with <span class="term">--&gt;</span>. Characters like <span class="term">&lt;</span>, <span class="term">&gt;</span>, and <span class="term">&amp;</span>&#160;may be allowed inside depending on <span class="term">$config</span>, but any <span class="term">--&gt;</span>&#160;inside should be put in as <span class="term">--&amp;gt;</span>. Any <span class="term">--</span>&#160;inside will be automatically converted to <span class="term">-</span>, and a space will be added before the <span class="term">--&gt;</span>&#160;comment-closing marker &#160;unless <span class="term">$config["comments"]</span>&#160;is set to <span class="term">4</span>&#160;(<a href="#s3.3.1">section 3.3.1</a>).<br />
 <br />
 &#160; * &#160;<span class="term">CDATA</span>&#160;sections should not be inside element tags, and can be in element content only if plain text is allowed for that element. They should begin with <span class="term">&lt;[CDATA[</span>&#160;and end with <span class="term">]]&gt;</span>. Characters like <span class="term">&lt;</span>, <span class="term">&gt;</span>, and <span class="term">&amp;</span>&#160;may be allowed inside depending on <span class="term">$config</span>, but any <span class="term">]]&gt;</span>&#160;inside should be put in as <span class="term">]]&amp;gt;</span>.<br />
 <br />
@@ -1076,7 +1076,7 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 <br />
 &#160; <span class="term">CDATA</span>&#160;sections have the format <span class="term">&lt;![CDATA[...anything but not "]]&gt;"...]]&gt;</span>, and HTML comments, <span class="term">&lt;!--...anything but not "--&gt;"... --&gt;</span>. Neither HTML comments nor <span class="term">CDATA</span>&#160;sections can reside inside tags. HTML comments can exist anywhere else, but <span class="term">CDATA</span>&#160;sections can exist only where plain text is allowed (e.g., immediately inside <span class="term">td</span>&#160;element content but not immediately inside <span class="term">tr</span>&#160;element content).<br />
 <br />
-&#160; htmLawed (function <span class="term">hl_cmtcd()</span>) handles HTML comments or <span class="term">CDATA</span>&#160;sections depending on the values of <span class="term">$config["comment"]</span>&#160;or <span class="term">$config["cdata"]</span>. If <span class="term">0</span>, such markup is not looked for and the text is processed like plain text. If <span class="term">1</span>, it is removed completely. If <span class="term">2</span>, it is preserved but any <span class="term">&lt;</span>, <span class="term">&gt;</span>&#160;and <span class="term">&amp;</span>&#160;inside are changed to entities. If <span class="term">3</span>, they are left as such.<br />
+&#160; htmLawed (function <span class="term">hl_cmtcd()</span>) handles HTML comments or <span class="term">CDATA</span>&#160;sections depending on the values of <span class="term">$config["comment"]</span>&#160;or <span class="term">$config["cdata"]</span>. If <span class="term">0</span>, such markup is not looked for and the text is processed like plain text. If <span class="term">1</span>, it is removed completely. If <span class="term">2</span>, it is preserved but any <span class="term">&lt;</span>, <span class="term">&gt;</span>&#160;and <span class="term">&amp;</span>&#160;inside are changed to entities. If <span class="term">3</span>&#160;for <span class="term">$config["cdata"]</span>, or <span class="term">3</span>&#160;or <span class="term">4</span>&#160;for <span class="term">$config["comment"]</span>, they are left as such. When <span class="term">$config["comment"]</span>&#160;is set to <span class="term">4</span>, htmLawed will not force a space character before the <span class="term">--&gt;</span>&#160;comment-closing marker. While such a space is required for standard-compliance, it can corrupt marker code put in HTML by some software (such as Microsoft Outlook).<br />
 <br />
 &#160; Note that for the last two cases, HTML comments and <span class="term">CDATA</span>&#160;sections will always be removed from tag content (function <span class="term">hl_tag()</span>).<br />
 <br />
@@ -1084,11 +1084,11 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 <br />
 &#160; Input:<br />
 
-<code class="code">&#160; &#160; &lt;!-- home link --&gt;&lt;a href="home.htm"&gt;&lt;![CDATA[x=&amp;y]]&gt;Home&lt;/a&gt;</code>
+<code class="code">&#160; &#160; &lt;!-- home link--&gt;&lt;a href="home.htm"&gt;&lt;![CDATA[x=&amp;y]]&gt;Home&lt;/a&gt;</code>
 <br />
 &#160; Output (<span class="term">$config["comment"] = 0, $config["cdata"] = 2</span>):<br />
 
-<code class="code">&#160; &#160; &amp;lt;-- home link --&amp;gt;&lt;a href="home.htm"&gt;&lt;![CDATA[x=&amp;amp;y]]&gt;Home&lt;/a&gt;</code>
+<code class="code">&#160; &#160; &amp;lt;-- home link--&amp;gt;&lt;a href="home.htm"&gt;&lt;![CDATA[x=&amp;amp;y]]&gt;Home&lt;/a&gt;</code>
 <br />
 &#160; Output (<span class="term">$config["comment"] = 1, $config["cdata"] = 2</span>):<br />
 
@@ -1106,8 +1106,12 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 
 <code class="code">&#160; &#160; &lt;!-- home link --&gt;&lt;a href="home.htm"&gt;&lt;![CDATA[x=&amp;y]]&gt;Home&lt;/a&gt;</code>
 <br />
+&#160; Output (<span class="term">$config["comment"] = 4, $config["cdata"] = 3</span>):<br />
+
+<code class="code">&#160; &#160; &lt;!-- home link--&gt;&lt;a href="home.htm"&gt;&lt;![CDATA[x=&amp;y]]&gt;Home&lt;/a&gt;</code>
 <br />
-&#160; For standard-compliance, comments are given the form <span class="term">&lt;!--comment --&gt;</span>, and any <span class="term">--</span>&#160;in the content is made <span class="term">-</span>.<br />
+<br />
+&#160; For standard-compliance, comments are given the form <span class="term">&lt;!--comment --&gt;</span>, and any <span class="term">--</span>&#160;in the content is made <span class="term">-</span>. When <span class="term">$config["comment"]</span>&#160;is set to <span class="term">4</span>, htmLawed will not force a space character before the <span class="term">--&gt;</span>&#160;comment-closing marker.<br />
 <br />
 &#160; When <span class="term">$config["safe"] = 1</span>, CDATA sections and comments are considered plain text unless <span class="term">$config["comment"]</span>&#160;or <span class="term">$config["cdata"]</span>&#160;is explicitly specified; see <a href="#s3.6">section 3.6</a>.<br />
 
@@ -1823,6 +1827,10 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 <br />
 &#160; <em>Version number - Release date. Notes</em><br />
 <br />
+&#160; 1.2.4 - 31 August 2017. Removes use of PHP <span class="term">create_function</span>&#160;function and <span class="term">$php_errormsg</span>&#160;reserved variable (deprecated in PHP 7.2)<br />
+<br />
+&#160; 1.2.3 - 5 July 2017. New option value of <span class="term">4</span>&#160;for <span class="term">$config["comments"]</span>&#160;to stop enforcing a space character before the <span class="term">--&gt;</span>&#160;comment-closing marker<br />
+<br />
 &#160; 1.2.2 - 25 May 2017. Fix for a bug in parsing <span class="term">$spec</span>&#160;that got introduced in version 1.2; also, <span class="term">$spec</span>&#160;is now parsed to accommodate specifications for an HTML element when they are specified in multiple rules<br />
 <br />
 &#160; 1.2.1.1 - 17 May 2017. Fix for a potential security vulnerability in transformation of deprecated attributes<br />
@@ -2268,7 +2276,7 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 </div>
 </div>
 <br />
-<hr /><br /><br /><span class="subtle"><small>HTM version of <em><a href="htmLawed_README.txt">htmLawed_README.txt</a></em> generated on 25 May, 2017 using <a href="http://www.bioinformatics.org/phplabware/internal_utilities">rTxt2htm</a> from PHP Labware</small></span>
+<hr /><br /><br /><span class="subtle"><small>HTM version of <em><a href="htmLawed_README.txt">htmLawed_README.txt</a></em> generated on 31 Aug, 2017 using <a href="http://www.bioinformatics.org/phplabware/internal_utilities">rTxt2htm</a> from PHP Labware</small></span>
 </div><!-- ended div body -->
 </div><!-- ended div top -->
 </body>
