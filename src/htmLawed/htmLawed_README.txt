@@ -1,6 +1,6 @@
 /*
-htmLawed_README.txt, 31 August 2017
-htmLawed 1.2.4, 31 August 2017
+htmLawed_README.txt, 12 September 2017
+htmLawed 1.2.4.1, 12 September 2017
 Copyright Santosh Patnaik
 Dual licensed with LGPL 3 and GPL 2+
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -1369,7 +1369,9 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
   (The release date for the downloadable package of files containing documentation, demo script, test-cases, etc., besides the 'htmLawed.php' file, may be updated without a change-log entry if the secondary files, but not htmLawed per se, are revised.)
 
   `Version number - Release date. Notes`
-  
+
+  1.2.4.1 - 12 September 2017. Corrects a function re-declaration bug introduced in version 1.2.4
+    
   1.2.4 - 31 August 2017. Removes use of PHP 'create_function' function and '$php_errormsg' reserved variable (deprecated in PHP 7.2)
   
   1.2.3 - 5 July 2017. New option value of '4' for '$config["comments"]' to stop enforcing a space character before the '-->' comment-closing marker
