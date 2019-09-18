@@ -166,45 +166,53 @@ function hl_attrval($a, $t, $p) {
                     if ($l > $v) {
                         $o = 0;
                     }
-                    break; case 'minlen':
+                    break;
+                case 'minlen':
                     if ($l < $v) {
                         $o = 0;
                     }
-                    break; case 'maxval':
-                        if ((float)($tv) > $v) {
-                            $o = 0;
+                    break;
+                case 'maxval':
+                    if ((float)($tv) > $v) {
+                        $o = 0;
+                    }
+                    break;
+                case 'minval':
+                    if ((float)($tv) < $v) {
+                        $o = 0;
+                    }
+                    break;
+                case 'match':
+                    if (!preg_match($v, $tv)) {
+                        $o = 0;
+                    }
+                    break;
+                case 'nomatch':
+                    if (preg_match($v, $tv)) {
+                        $o = 0;
+                    }
+                    break;
+                case 'oneof':
+                    $m = 0;
+                    foreach (explode('|', $v) as $n) {
+                        if ($tv == $n) {
+                            $m = 1;
+                            break;
                         }
-                    break; case 'minval':
-                        if ((float)($tv) < $v) {
-                            $o = 0;
+                    }
+                    $o = $m;
+                    break;
+                case 'noneof':
+                    $m = 1;
+                    foreach (explode('|', $v) as $n) {
+                        if ($tv == $n) {
+                            $m = 0;
+                            break;
                         }
-                    break; case 'match':
-                        if (!preg_match($v, $tv)) {
-                            $o = 0;
-                        }
-                    break; case 'nomatch':
-                        if (preg_match($v, $tv)) {
-                            $o = 0;
-                        }
-                    break; case 'oneof':
-                        $m = 0;
-                        foreach (explode('|', $v) as $n) {
-                            if ($tv == $n) {
-                                $m = 1;
-                                break;
-                            }
-                        }
-                        $o = $m;
-                    break; case 'noneof':
-                        $m = 1;
-                        foreach (explode('|', $v) as $n) {
-                            if ($tv == $n) {
-                                $m = 0;
-                                break;
-                            }
-                        }
-                        $o = $m;
-                    break; default:
+                    }
+                    $o = $m;
+                    break;
+                default:
                     break;
             }
             if (!$o) {
@@ -379,10 +387,12 @@ function hl_bal($t, $do = 1, $in = 'div') {
                 }
                 continue;
             }
-            if (!isset($cE[$e])) {
-                $q[] = $e;
+            if ($e !== 'span' || !empty($a)) {
+                if (!isset($cE[$e])) {
+                    $q[] = $e;
+                }
+                echo '<', $e, $a, '>';
             }
-            echo '<', $e, $a, '>';
             unset($e);
             continue;
         }
@@ -748,7 +758,8 @@ function hl_tag($t) {
                     $w = $mode = 1;
                     $a = ltrim(substr_replace($a, '', 0, strlen($m[0])));
                 }
-                break; case 1:
+                break;
+            case 1:
                 if ($a[0] == '=') { // =
                     $w = 1;
                     $mode = 2;
@@ -759,14 +770,15 @@ function hl_tag($t) {
                     $a = ltrim($a);
                     $aA[$nm] = '';
                 }
-                break; case 2: // Val
-                    if (preg_match('`^((?:"[^"]*")|(?:\'[^\']*\')|(?:\s*[^\s"\']+))(.*)`', $a, $m)) {
-                        $a = ltrim($m[2]);
-                        $m = $m[1];
-                        $w = 1;
-                        $mode = 0;
-                        $aA[$nm] = trim(str_replace('<', '&lt;', ($m[0] == '"' or $m[0] == '\'') ? substr($m, 1, -1) : $m));
-                    }
+                break;
+            case 2: // Val
+                if (preg_match('`^((?:"[^"]*")|(?:\'[^\']*\')|(?:\s*[^\s"\']+))(.*)`', $a, $m)) {
+                    $a = ltrim($m[2]);
+                    $m = $m[1];
+                    $w = 1;
+                    $mode = 0;
+                    $aA[$nm] = trim(str_replace('<', '&lt;', ($m[0] == '"' or $m[0] == '\'') ? substr($m, 1, -1) : $m));
+                }
                 break;
         }
         if ($w == 0) { // Parse errs, deal with space, " & '
