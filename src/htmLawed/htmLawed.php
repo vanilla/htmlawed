@@ -1,7 +1,7 @@
 <?php
 
 /*
-htmLawed 1.2.4.2, 16 May 2019
+htmLawed 1.2.5, 24 September 2019
 Copyright Santosh Patnaik
 Dual licensed with LGPL 3 and GPL 2+
 A PHP Labware internal utility - www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -9,12 +9,6 @@ A PHP Labware internal utility - www.bioinformatics.org/phplabware/internal_util
 See htmLawed_README.txt/htm
 */
 
-/**
- * @param string $t
- * @param int|array $C
- * @param array|string $S
- * @return string
- */
 function htmLawed($t, $C = 1, $S = array()) {
     $C = is_array($C) ? $C : array();
     if (!empty($C['valid_xhtml'])) {
@@ -387,12 +381,10 @@ function hl_bal($t, $do = 1, $in = 'div') {
                 }
                 continue;
             }
-            if ($e !== 'span' || !empty($a)) {
-                if (!isset($cE[$e])) {
-                    $q[] = $e;
-                }
-                echo '<', $e, $a, '>';
+            if (!isset($cE[$e])) {
+                $q[] = $e;
             }
+            echo '<', $e, $a, '>';
             unset($e);
             continue;
         }
@@ -1012,11 +1004,11 @@ function hl_tag2(&$e, &$a, $t = 1) {
         $a2 = '';
         while (preg_match('`(^|\s)(color|size)\s*=\s*(\'|")?(.+?)(\\3|\s|$)`i', $a, $m)) {
             $a = str_replace($m[0], ' ', $a);
-            $a2 .= strtolower($m[2]) == 'color' ? (' color: '.str_replace('"', '\'', trim($m[4])).';') : (isset($fs[($m = trim($m[4]))]) ? ($a2 .= ' font-size: '.str_replace('"', '\'', $fs[$m]).';') : '');
+            $a2 .= strtolower($m[2]) == 'color' ? (' color: '.str_replace(array('"', ';', ':'), '\'', trim($m[4])).';') : (isset($fs[($m = trim($m[4]))]) ? (' font-size: '.$fs[$m].';') : '');
         }
         while (preg_match('`(^|\s)face\s*=\s*(\'|")?([^=]+?)\\2`i', $a, $m) or preg_match('`(^|\s)face\s*=(\s*)(\S+)`i', $a, $m)) {
             $a = str_replace($m[0], ' ', $a);
-            $a2 .= ' font-family: '.str_replace('"', '\'', trim($m[3])).';';
+            $a2 .= ' font-family: '.str_replace(array('"', ';', ':'), '\'', trim($m[3])).';';
         }
         $e = 'span';
 
@@ -1123,5 +1115,5 @@ function hl_tidy($t, $w, $p) {
 
 function hl_version() {
     // version
-    return '1.2.4.2';
+    return '1.2.5';
 }
