@@ -16,7 +16,9 @@ function htmLawed($t, $C = 1, $S = array()) {
     if (!empty($C['valid_xhtml'])) {
         $C['elements'] = empty($C['elements']) ? '*-acronym-big-center-dir-font-isindex-s-strike-tt' : $C['elements'];
         $C['make_tag_strict'] = isset($C['make_tag_strict']) ? $C['make_tag_strict'] : 2;
-        $C['xml:lang'] = isset($C['xml:lang']) ? $C['xml:lang'] : 2;
+        if (!isset($C['xml:lang'])) {
+            $C['xml:lang'] = 2;
+        }
     }
     // config eles
     $e = array('a' => 1, 'abbr' => 1, 'acronym' => 1, 'address' => 1, 'applet' => 1, 'area' => 1, 'article' => 1, 'aside' => 1, 'audio' => 1, 'b' => 1, 'bdi' => 1, 'bdo' => 1, 'big' => 1, 'blockquote' => 1, 'br' => 1, 'button' => 1, 'canvas' => 1, 'caption' => 1, 'center' => 1, 'cite' => 1, 'code' => 1, 'col' => 1, 'colgroup' => 1, 'command' => 1, 'data' => 1, 'datalist' => 1, 'dd' => 1, 'del' => 1, 'details' => 1, 'dfn' => 1, 'dir' => 1, 'div' => 1, 'dl' => 1, 'dt' => 1, 'em' => 1, 'embed' => 1, 'fieldset' => 1, 'figcaption' => 1, 'figure' => 1, 'font' => 1, 'footer' => 1, 'form' => 1, 'h1' => 1, 'h2' => 1, 'h3' => 1, 'h4' => 1, 'h5' => 1, 'h6' => 1, 'header' => 1, 'hgroup' => 1, 'hr' => 1, 'i' => 1, 'iframe' => 1, 'img' => 1, 'input' => 1, 'ins' => 1, 'isindex' => 1, 'kbd' => 1, 'keygen' => 1, 'label' => 1, 'legend' => 1, 'li' => 1, 'link' => 1, 'main' => 1, 'map' => 1, 'mark' => 1, 'menu' => 1, 'meta' => 1, 'meter' => 1, 'nav' => 1, 'noscript' => 1, 'object' => 1, 'ol' => 1, 'optgroup' => 1, 'option' => 1, 'output' => 1, 'p' => 1, 'param' => 1, 'pre' => 1, 'progress' => 1, 'q' => 1, 'rb' => 1, 'rbc' => 1, 'rp' => 1, 'rt' => 1, 'rtc' => 1, 'ruby' => 1, 's' => 1, 'samp' => 1, 'script' => 1, 'section' => 1, 'select' => 1, 'small' => 1, 'source' => 1, 'span' => 1, 'strike' => 1, 'strong' => 1, 'style' => 1, 'sub' => 1, 'summary' => 1, 'sup' => 1, 'table' => 1, 'tbody' => 1, 'td' => 1, 'textarea' => 1, 'tfoot' => 1, 'th' => 1, 'thead' => 1, 'time' => 1, 'tr' => 1, 'track' => 1, 'tt' => 1, 'u' => 1, 'ul' => 1, 'var' => 1, 'video' => 1, 'wbr' => 1); // 118 incl. deprecated & some Ruby
@@ -69,7 +71,9 @@ function htmLawed($t, $C = 1, $S = array()) {
     if (!empty($C['safe']) && empty($C['schemes']['style'])) {
         $C['schemes']['style'] = array('!' => 1);
     }
-    $C['abs_url'] = isset($C['abs_url']) ? $C['abs_url'] : 0;
+    if (!isset($C['abs_url'])) {
+        $C['abs_url'] = 0;
+    }
     if (!isset($C['base_url']) or !preg_match('`^[a-zA-Z\d.+\-]+://[^/]+/(.+?/)?$`', $C['base_url'])) {
         $C['base_url'] = $C['abs_url'] = 0;
     }
@@ -87,20 +91,30 @@ function htmLawed($t, $C = 1, $S = array()) {
     }
     $C['css_expression'] = empty($C['css_expression']) ? 0 : 1;
     $C['direct_list_nest'] = empty($C['direct_list_nest']) ? 0 : 1;
-    $C['hexdec_entity'] = isset($C['hexdec_entity']) ? $C['hexdec_entity'] : 1;
+    if (!isset($C['hexdec_entity'])) {
+        $C['hexdec_entity'] = 1;
+    }
     $C['hook'] = (!empty($C['hook']) && function_exists($C['hook'])) ? $C['hook'] : 0;
     $C['hook_tag'] = (!empty($C['hook_tag']) && function_exists($C['hook_tag'])) ? $C['hook_tag'] : 0;
-    $C['keep_bad'] = isset($C['keep_bad']) ? $C['keep_bad'] : 6;
+    if (!isset($C['keep_bad'])) {
+        $C['keep_bad'] = 6;
+    }
     $C['lc_std_val'] = isset($C['lc_std_val']) ? (bool)$C['lc_std_val'] : 1;
-    $C['make_tag_strict'] = isset($C['make_tag_strict']) ? $C['make_tag_strict'] : 1;
+    if (!isset($C['make_tag_strict'])) {
+        $C['make_tag_strict'] = 1;
+    }
     $C['named_entity'] = isset($C['named_entity']) ? (bool)$C['named_entity'] : 1;
-    $C['no_deprecated_attr'] = isset($C['no_deprecated_attr']) ? $C['no_deprecated_attr'] : 1;
+    if (!isset($C['no_deprecated_attr'])) {
+        $C['no_deprecated_attr'] = 1;
+    }
     $C['parent'] = isset($C['parent'][0]) ? strtolower($C['parent']) : 'body';
     $C['show_setting'] = !empty($C['show_setting']) ? $C['show_setting'] : 0;
     $C['style_pass'] = empty($C['style_pass']) ? 0 : 1;
     $C['tidy'] = empty($C['tidy']) ? 0 : $C['tidy'];
     $C['unique_ids'] = isset($C['unique_ids']) && (!preg_match('`\W`', $C['unique_ids'])) ? $C['unique_ids'] : 1;
-    $C['xml:lang'] = isset($C['xml:lang']) ? $C['xml:lang'] : 0;
+    if (!isset($C['xml:lang'])) {
+        $C['xml:lang'] = 0;
+    }
 
     if (isset($GLOBALS['C'])) {
         $reC = $GLOBALS['C'];
