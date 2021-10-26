@@ -581,7 +581,7 @@ function hl_regex($p) {
     if (empty($p)) {
         return 0;
     }
-    if ($v = function_exists('error_clear_last') && function_exists('error_get_last')) {
+    if ($v = (function_exists('error_clear_last') && function_exists('error_get_last'))) {
         error_clear_last();
     } else {
         if ($t = ini_get('track_errors')) {
