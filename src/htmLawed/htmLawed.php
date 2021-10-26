@@ -490,10 +490,7 @@ function hl_bal($t, $do = 1, $in = 'div') {
     while (!empty($q) && ($e = array_pop($q))) {
         echo '</', $e, '>';
     }
-    $o = ob_get_contents();
-    ob_end_clean();
-
-    return $o;
+    return ob_get_clean();
 }
 
 function hl_cmtcd($t) {
@@ -1112,8 +1109,7 @@ function hl_tidy($t, $w, $p) {
         }
         $X = 0;
     }
-    $t = str_replace(array("\n ", " \n"), "\n", preg_replace('`[\n]\s*?[\n]+`', "\n", ob_get_contents()));
-    ob_end_clean();
+    $t = str_replace(array("\n ", " \n"), "\n", preg_replace('`[\n]\s*?[\n]+`', "\n", ob_get_clean()));
     if (($l = strpos(" $w", 'r') ? (strpos(" $w", 'n') ? "\r\n" : "\r") : 0)) {
         $t = str_replace("\n", $l, $t);
     }
