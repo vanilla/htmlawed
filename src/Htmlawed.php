@@ -10,7 +10,6 @@
  */
 class Htmlawed {
     /// Methods ///
-
     public static $defaultConfig = [
         'anti_link_spam' => ['`.`', ''],
         'balance' => 1,
@@ -67,7 +66,7 @@ class Htmlawed {
      * @see Htmlawed::filter().
      */
     public static function filterRSS($html) {
-        $config = array(
+        $config = [
             'anti_link_spam' => ['`.`', ''],
             'comment' => 1,
             'cdata' => 3,
@@ -78,12 +77,7 @@ class Htmlawed {
             'schemes' => 'classid:clsid; href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, telnet; style: nil; *:file, http, https', // clsid allowed in class
             'valid_xhtml' => 1,
             'balance' => 1
-        );
-        $spec = static::$defaultSpec;
-
-        $result = static::filter($html, $config, $spec);
-
-        return $result;
+        ];
+        return static::filter($html, $config, static::$defaultSpec);
     }
 }
- 

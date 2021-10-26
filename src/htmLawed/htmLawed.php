@@ -10,11 +10,15 @@ See htmLawed_README.txt/htm
 */
 
 function htmLawed($t, $C = 1, $S = array()) {
-    $C = is_array($C) ? $C : array();
+    if (!is_array($C)) {
+        $C = array();
+    }
     if (!empty($C['valid_xhtml'])) {
         $C['elements'] = empty($C['elements']) ? '*-acronym-big-center-dir-font-isindex-s-strike-tt' : $C['elements'];
         $C['make_tag_strict'] = isset($C['make_tag_strict']) ? $C['make_tag_strict'] : 2;
-        $C['xml:lang'] = isset($C['xml:lang']) ? $C['xml:lang'] : 2;
+        if (!isset($C['xml:lang'])) {
+            $C['xml:lang'] = 2;
+        }
     }
     // config eles
     $e = array('a' => 1, 'abbr' => 1, 'acronym' => 1, 'address' => 1, 'applet' => 1, 'area' => 1, 'article' => 1, 'aside' => 1, 'audio' => 1, 'b' => 1, 'bdi' => 1, 'bdo' => 1, 'big' => 1, 'blockquote' => 1, 'br' => 1, 'button' => 1, 'canvas' => 1, 'caption' => 1, 'center' => 1, 'cite' => 1, 'code' => 1, 'col' => 1, 'colgroup' => 1, 'command' => 1, 'data' => 1, 'datalist' => 1, 'dd' => 1, 'del' => 1, 'details' => 1, 'dfn' => 1, 'dir' => 1, 'div' => 1, 'dl' => 1, 'dt' => 1, 'em' => 1, 'embed' => 1, 'fieldset' => 1, 'figcaption' => 1, 'figure' => 1, 'font' => 1, 'footer' => 1, 'form' => 1, 'h1' => 1, 'h2' => 1, 'h3' => 1, 'h4' => 1, 'h5' => 1, 'h6' => 1, 'header' => 1, 'hgroup' => 1, 'hr' => 1, 'i' => 1, 'iframe' => 1, 'img' => 1, 'input' => 1, 'ins' => 1, 'isindex' => 1, 'kbd' => 1, 'keygen' => 1, 'label' => 1, 'legend' => 1, 'li' => 1, 'link' => 1, 'main' => 1, 'map' => 1, 'mark' => 1, 'menu' => 1, 'meta' => 1, 'meter' => 1, 'nav' => 1, 'noscript' => 1, 'object' => 1, 'ol' => 1, 'optgroup' => 1, 'option' => 1, 'output' => 1, 'p' => 1, 'param' => 1, 'pre' => 1, 'progress' => 1, 'q' => 1, 'rb' => 1, 'rbc' => 1, 'rp' => 1, 'rt' => 1, 'rtc' => 1, 'ruby' => 1, 's' => 1, 'samp' => 1, 'script' => 1, 'section' => 1, 'select' => 1, 'small' => 1, 'source' => 1, 'span' => 1, 'strike' => 1, 'strong' => 1, 'style' => 1, 'sub' => 1, 'summary' => 1, 'sup' => 1, 'table' => 1, 'tbody' => 1, 'td' => 1, 'textarea' => 1, 'tfoot' => 1, 'th' => 1, 'thead' => 1, 'time' => 1, 'tr' => 1, 'track' => 1, 'tt' => 1, 'u' => 1, 'ul' => 1, 'var' => 1, 'video' => 1, 'wbr' => 1); // 118 incl. deprecated & some Ruby
@@ -23,7 +27,7 @@ function htmLawed($t, $C = 1, $S = array()) {
         unset($e['applet'], $e['audio'], $e['canvas'], $e['embed'], $e['iframe'], $e['object'], $e['script'], $e['video']);
     }
     $x = !empty($C['elements']) ? str_replace(array("\n", "\r", "\t", ' '), '', $C['elements']) : '*';
-    if ($x == '-*') {
+    if ($x === '-*') {
         $e = array();
     } elseif (strpos($x, '*') === false) {
         $e = array_flip(explode(',', $x));
@@ -46,10 +50,25 @@ function htmLawed($t, $C = 1, $S = array()) {
     $C['elements'] = &$e;
     // config attrs
     $x = !empty($C['deny_attribute']) ? strtolower(str_replace(array("\n", "\r", "\t", ' '), '', $C['deny_attribute'])) : '';
-    $x = array_flip((isset($x[0]) && $x[0] == '*') ? str_replace('/', 'data-', explode('-', str_replace('data-', '/', $x))) : explode(',', $x.(!empty($C['safe']) ? ',on*' : '')));
+    if (!isset($x[0]) || $x[0] !== '*') {
+        $x = array_flip(explode(',', $x . (!empty($C['safe']) ? ',on*' : '')));
+    } else {
+        $x = array_flip(
+            str_replace('/', 'data-', explode('-', str_replace('data-', '/', $x)))
+        );
+    }
     $C['deny_attribute'] = $x;
     // config URLs
-    $x = (isset($C['schemes'][2]) && strpos($C['schemes'], ':')) ? strtolower($C['schemes']) : 'href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, tel, telnet'.(empty($C['safe']) ? ', app, javascript; *: data, javascript, ' : '; *:').'file, http, https';
+    if (!isset($C['schemes'][2]) || !strpos($C['schemes'], ':')) {
+        if (empty($C['safe'])) {
+            $x = 'href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, tel, telnet' . (', app, javascript; *: data, javascript, ') . 'file, http, https';
+        } else {
+            $x = 'href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, tel, telnet' . ('; *:') . 'file, http, https';
+        }
+    } else {
+        $x = strtolower($C['schemes']);
+    }
+
     $C['schemes'] = array();
     foreach (explode(';', trim(str_replace(array(' ', "\t", "\r", "\n"), '', $x), ';')) as $v) {
         $x = $x2 = null;
@@ -67,34 +86,60 @@ function htmLawed($t, $C = 1, $S = array()) {
     if (!empty($C['safe']) && empty($C['schemes']['style'])) {
         $C['schemes']['style'] = array('!' => 1);
     }
-    $C['abs_url'] = isset($C['abs_url']) ? $C['abs_url'] : 0;
+    if (!isset($C['abs_url'])) {
+        $C['abs_url'] = 0;
+    }
     if (!isset($C['base_url']) or !preg_match('`^[a-zA-Z\d.+\-]+://[^/]+/(.+?/)?$`', $C['base_url'])) {
         $C['base_url'] = $C['abs_url'] = 0;
     }
     // config rest
     $C['and_mark'] = empty($C['and_mark']) ? 0 : 1;
-    $C['anti_link_spam'] = (isset($C['anti_link_spam']) && is_array($C['anti_link_spam']) && count($C['anti_link_spam']) == 2 && (empty($C['anti_link_spam'][0]) or hl_regex($C['anti_link_spam'][0])) && (empty($C['anti_link_spam'][1]) or hl_regex($C['anti_link_spam'][1]))) ? $C['anti_link_spam'] : 0;
-    $C['anti_mail_spam'] = isset($C['anti_mail_spam']) ? $C['anti_mail_spam'] : 0;
+    if (
+        !isset($C['anti_link_spam'])
+        || !is_array($C['anti_link_spam'])
+        || count($C['anti_link_spam']) != 2
+        || (!empty($C['anti_link_spam'][0]) && !hl_regex($C['anti_link_spam'][0]))
+        || (!empty($C['anti_link_spam'][1]) && !hl_regex($C['anti_link_spam'][1]))
+    ) {
+        $C['anti_link_spam'] = 0;
+    }
+    if (!isset($C['anti_mail_spam'])) {
+        $C['anti_mail_spam'] = 0;
+    }
     $C['balance'] = isset($C['balance']) ? (bool)$C['balance'] : 1;
-    $C['cdata'] = isset($C['cdata']) ? $C['cdata'] : (empty($C['safe']) ? 3 : 0);
+    if (!isset($C['cdata'])) {
+        $C['cdata'] = empty($C['safe']) ? 3 : 0;
+    }
     $C['clean_ms_char'] = empty($C['clean_ms_char']) ? 0 : $C['clean_ms_char'];
-    $C['comment'] = isset($C['comment']) ? $C['comment'] : (empty($C['safe']) ? 3 : 0);
+    if (!isset($C['comment'])) {
+        $C['comment'] = empty($C['safe']) ? 3 : 0;
+    }
     $C['css_expression'] = empty($C['css_expression']) ? 0 : 1;
     $C['direct_list_nest'] = empty($C['direct_list_nest']) ? 0 : 1;
-    $C['hexdec_entity'] = isset($C['hexdec_entity']) ? $C['hexdec_entity'] : 1;
+    if (!isset($C['hexdec_entity'])) {
+        $C['hexdec_entity'] = 1;
+    }
     $C['hook'] = (!empty($C['hook']) && function_exists($C['hook'])) ? $C['hook'] : 0;
     $C['hook_tag'] = (!empty($C['hook_tag']) && function_exists($C['hook_tag'])) ? $C['hook_tag'] : 0;
-    $C['keep_bad'] = isset($C['keep_bad']) ? $C['keep_bad'] : 6;
+    if (!isset($C['keep_bad'])) {
+        $C['keep_bad'] = 6;
+    }
     $C['lc_std_val'] = isset($C['lc_std_val']) ? (bool)$C['lc_std_val'] : 1;
-    $C['make_tag_strict'] = isset($C['make_tag_strict']) ? $C['make_tag_strict'] : 1;
+    if (!isset($C['make_tag_strict'])) {
+        $C['make_tag_strict'] = 1;
+    }
     $C['named_entity'] = isset($C['named_entity']) ? (bool)$C['named_entity'] : 1;
-    $C['no_deprecated_attr'] = isset($C['no_deprecated_attr']) ? $C['no_deprecated_attr'] : 1;
+    if (!isset($C['no_deprecated_attr'])) {
+        $C['no_deprecated_attr'] = 1;
+    }
     $C['parent'] = isset($C['parent'][0]) ? strtolower($C['parent']) : 'body';
     $C['show_setting'] = !empty($C['show_setting']) ? $C['show_setting'] : 0;
     $C['style_pass'] = empty($C['style_pass']) ? 0 : 1;
     $C['tidy'] = empty($C['tidy']) ? 0 : $C['tidy'];
     $C['unique_ids'] = isset($C['unique_ids']) && (!preg_match('`\W`', $C['unique_ids'])) ? $C['unique_ids'] : 1;
-    $C['xml:lang'] = isset($C['xml:lang']) ? $C['xml:lang'] : 0;
+    if (!isset($C['xml:lang'])) {
+        $C['xml:lang'] = 0;
+    }
 
     if (isset($GLOBALS['C'])) {
         $reC = $GLOBALS['C'];
@@ -128,7 +173,9 @@ function htmLawed($t, $C = 1, $S = array()) {
     // main
     $t = preg_replace_callback('`<(?:(?:\s|$)|(?:[^>]*(?:>|$)))|>`m', 'hl_tag', $t);
     $t = $C['balance'] ? hl_bal($t, $C['keep_bad'], $C['parent']) : $t;
-    $t = (($C['cdata'] or $C['comment']) && strpos($t, "\x01") !== false) ? str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05"), array('', '', '&', '<', '>'), $t) : $t;
+    if (($C['cdata'] || $C['comment']) && strpos($t, "\x01") !== false) {
+        $t = str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05"), array('', '', '&', '<', '>'), $t);
+    }
     $t = $C['tidy'] ? hl_tidy($t, $C['tidy'], $C['parent']) : $t;
     unset($C, $e);
     if (isset($reC)) {
@@ -144,7 +191,13 @@ function htmLawed($t, $C = 1, $S = array()) {
 function hl_attrval($a, $t, $p) {
     // check attr val against $S
     static $ma = array('accesskey', 'class', 'itemtype', 'rel');
-    $s = in_array($a, $ma) ? ' ' : ($a == 'srcset' ? ',' : '');
+    if (in_array($a, $ma)) {
+        $s = ' ';
+    } elseif ($a === 'srcset') {
+        $s = ',';
+    } else {
+        $s = '';
+    }
     $r = array();
     $t = !empty($s) ? explode($s, $t) : array($t);
     foreach ($t as $tk => $tv) {
@@ -217,12 +270,18 @@ function hl_attrval($a, $t, $p) {
             $r[] = $tv;
         }
     }
-    if ($s == ',') {
+    if ($s === ',') {
         $s = ', ';
     }
     $r = implode($s, $r);
 
-    return isset($r[0]) ? $r : (isset($p['default']) ? $p['default'] : 0);
+    if (isset($r[0])) {
+        return $r;
+    }
+    if (isset($p['default'])) {
+        return $p['default'];
+    }
+    return 0;
 }
 
 function hl_bal($t, $do = 1, $in = 'div') {
@@ -248,7 +307,7 @@ function hl_bal($t, $do = 1, $in = 'div') {
     $eF = $eB + $eI;
 
     // $in sets allowed child
-    $in = ((isset($eF[$in]) && $in != '#pcdata') or isset($eO[$in])) ? $in : 'div';
+    $in = ((isset($eF[$in]) && $in !== '#pcdata') or isset($eO[$in])) ? $in : 'div';
     if (isset($cE[$in])) {
         return !$do ? '' : str_replace(array('<', '>'), array('&lt;', '&gt;'), $t);
     }
@@ -315,7 +374,11 @@ function hl_bal($t, $do = 1, $in = 'div') {
                 echo $x;
             } elseif (strpos($x, "\x02\x04")) {
                 foreach (preg_split('`(\x01\x02[^\x01\x02]+\x02\x01)`', $x, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $v) {
-                    echo substr($v, 0, 2) == "\x01\x02" ? $v : ($do > 4 ? preg_replace('`\S`', '', $v) : '');
+                    if (substr($v, 0, 2) === "\x01\x02") {
+                        echo $v;
+                    } elseif ($do > 4) {
+                        echo preg_replace('`\S`', '', $v);
+                    }
                 }
             } elseif ($do > 4) {
                 echo preg_replace('`\S`', '', $x);
@@ -475,7 +538,11 @@ function hl_bal($t, $do = 1, $in = 'div') {
             echo $x;
         } elseif (strpos($x, "\x02\x04")) {
             foreach (preg_split('`(\x01\x02[^\x01\x02]+\x02\x01)`', $x, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $v) {
-                echo substr($v, 0, 2) == "\x01\x02" ? $v : ($do > 4 ? preg_replace('`\S`', '', $v) : '');
+                if (substr($v, 0, 2) === "\x01\x02") {
+                    echo $v;
+                } else {
+                    echo($do > 4 ? preg_replace('`\S`', '', $v) : '');
+                }
             }
         } elseif ($do > 4) {
             echo preg_replace('`\S`', '', $x);
@@ -484,24 +551,22 @@ function hl_bal($t, $do = 1, $in = 'div') {
     while (!empty($q) && ($e = array_pop($q))) {
         echo '</', $e, '>';
     }
-    $o = ob_get_contents();
-    ob_end_clean();
-
-    return $o;
+    return ob_get_clean();
 }
 
 function hl_cmtcd($t) {
     // comment/CDATA sec handler
     $t = $t[0];
     global $C;
-    if (!($v = $C[$n = $t[3] == '-' ? 'comment' : 'cdata'])) {
+    $v = $C[$n = $t[3] == '-' ? 'comment' : 'cdata'];
+    if (!$v) {
         return $t;
     }
     if ($v == 1) {
         return '';
     }
-    if ($n == 'comment' && $v < 4) {
-        if (substr(($t = preg_replace('`--+`', '-', substr($t, 4, -3))), -1) != ' ') {
+    if ($n === 'comment' && $v < 4) {
+        if (substr(($t = preg_replace('`--+`', '-', substr($t, 4, -3))), -1) !== ' ') {
             $t .= ' ';
         }
     } else {
@@ -509,7 +574,10 @@ function hl_cmtcd($t) {
     }
     $t = $v == 2 ? str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $t) : $t;
 
-    return str_replace(array('&', '<', '>'), array("\x03", "\x04", "\x05"), ($n == 'comment' ? "\x01\x02\x04!--$t--\x05\x02\x01" : "\x01\x01\x04$t\x05\x01\x01"));
+    if ($n === 'comment') {
+        return str_replace(array('&', '<', '>'), array("\x03", "\x04", "\x05"), ("\x01\x02\x04!--$t--\x05\x02\x01"));
+    }
+    return str_replace(array('&', '<', '>'), array("\x03", "\x04", "\x05"), ("\x01\x01\x04$t\x05\x01\x01"));
 }
 
 function hl_ent($t) {
@@ -518,14 +586,90 @@ function hl_ent($t) {
     $t = $t[1];
     static $U = array('quot' => 1, 'amp' => 1, 'lt' => 1, 'gt' => 1);
     static $N = array('fnof' => '402', 'Alpha' => '913', 'Beta' => '914', 'Gamma' => '915', 'Delta' => '916', 'Epsilon' => '917', 'Zeta' => '918', 'Eta' => '919', 'Theta' => '920', 'Iota' => '921', 'Kappa' => '922', 'Lambda' => '923', 'Mu' => '924', 'Nu' => '925', 'Xi' => '926', 'Omicron' => '927', 'Pi' => '928', 'Rho' => '929', 'Sigma' => '931', 'Tau' => '932', 'Upsilon' => '933', 'Phi' => '934', 'Chi' => '935', 'Psi' => '936', 'Omega' => '937', 'alpha' => '945', 'beta' => '946', 'gamma' => '947', 'delta' => '948', 'epsilon' => '949', 'zeta' => '950', 'eta' => '951', 'theta' => '952', 'iota' => '953', 'kappa' => '954', 'lambda' => '955', 'mu' => '956', 'nu' => '957', 'xi' => '958', 'omicron' => '959', 'pi' => '960', 'rho' => '961', 'sigmaf' => '962', 'sigma' => '963', 'tau' => '964', 'upsilon' => '965', 'phi' => '966', 'chi' => '967', 'psi' => '968', 'omega' => '969', 'thetasym' => '977', 'upsih' => '978', 'piv' => '982', 'bull' => '8226', 'hellip' => '8230', 'prime' => '8242', 'Prime' => '8243', 'oline' => '8254', 'frasl' => '8260', 'weierp' => '8472', 'image' => '8465', 'real' => '8476', 'trade' => '8482', 'alefsym' => '8501', 'larr' => '8592', 'uarr' => '8593', 'rarr' => '8594', 'darr' => '8595', 'harr' => '8596', 'crarr' => '8629', 'lArr' => '8656', 'uArr' => '8657', 'rArr' => '8658', 'dArr' => '8659', 'hArr' => '8660', 'forall' => '8704', 'part' => '8706', 'exist' => '8707', 'empty' => '8709', 'nabla' => '8711', 'isin' => '8712', 'notin' => '8713', 'ni' => '8715', 'prod' => '8719', 'sum' => '8721', 'minus' => '8722', 'lowast' => '8727', 'radic' => '8730', 'prop' => '8733', 'infin' => '8734', 'ang' => '8736', 'and' => '8743', 'or' => '8744', 'cap' => '8745', 'cup' => '8746', 'int' => '8747', 'there4' => '8756', 'sim' => '8764', 'cong' => '8773', 'asymp' => '8776', 'ne' => '8800', 'equiv' => '8801', 'le' => '8804', 'ge' => '8805', 'sub' => '8834', 'sup' => '8835', 'nsub' => '8836', 'sube' => '8838', 'supe' => '8839', 'oplus' => '8853', 'otimes' => '8855', 'perp' => '8869', 'sdot' => '8901', 'lceil' => '8968', 'rceil' => '8969', 'lfloor' => '8970', 'rfloor' => '8971', 'lang' => '9001', 'rang' => '9002', 'loz' => '9674', 'spades' => '9824', 'clubs' => '9827', 'hearts' => '9829', 'diams' => '9830', 'apos' => '39',  'OElig' => '338', 'oelig' => '339', 'Scaron' => '352', 'scaron' => '353', 'Yuml' => '376', 'circ' => '710', 'tilde' => '732', 'ensp' => '8194', 'emsp' => '8195', 'thinsp' => '8201', 'zwnj' => '8204', 'zwj' => '8205', 'lrm' => '8206', 'rlm' => '8207', 'ndash' => '8211', 'mdash' => '8212', 'lsquo' => '8216', 'rsquo' => '8217', 'sbquo' => '8218', 'ldquo' => '8220', 'rdquo' => '8221', 'bdquo' => '8222', 'dagger' => '8224', 'Dagger' => '8225', 'permil' => '8240', 'lsaquo' => '8249', 'rsaquo' => '8250', 'euro' => '8364', 'nbsp' => '160', 'iexcl' => '161', 'cent' => '162', 'pound' => '163', 'curren' => '164', 'yen' => '165', 'brvbar' => '166', 'sect' => '167', 'uml' => '168', 'copy' => '169', 'ordf' => '170', 'laquo' => '171', 'not' => '172', 'shy' => '173', 'reg' => '174', 'macr' => '175', 'deg' => '176', 'plusmn' => '177', 'sup2' => '178', 'sup3' => '179', 'acute' => '180', 'micro' => '181', 'para' => '182', 'middot' => '183', 'cedil' => '184', 'sup1' => '185', 'ordm' => '186', 'raquo' => '187', 'frac14' => '188', 'frac12' => '189', 'frac34' => '190', 'iquest' => '191', 'Agrave' => '192', 'Aacute' => '193', 'Acirc' => '194', 'Atilde' => '195', 'Auml' => '196', 'Aring' => '197', 'AElig' => '198', 'Ccedil' => '199', 'Egrave' => '200', 'Eacute' => '201', 'Ecirc' => '202', 'Euml' => '203', 'Igrave' => '204', 'Iacute' => '205', 'Icirc' => '206', 'Iuml' => '207', 'ETH' => '208', 'Ntilde' => '209', 'Ograve' => '210', 'Oacute' => '211', 'Ocirc' => '212', 'Otilde' => '213', 'Ouml' => '214', 'times' => '215', 'Oslash' => '216', 'Ugrave' => '217', 'Uacute' => '218', 'Ucirc' => '219', 'Uuml' => '220', 'Yacute' => '221', 'THORN' => '222', 'szlig' => '223', 'agrave' => '224', 'aacute' => '225', 'acirc' => '226', 'atilde' => '227', 'auml' => '228', 'aring' => '229', 'aelig' => '230', 'ccedil' => '231', 'egrave' => '232', 'eacute' => '233', 'ecirc' => '234', 'euml' => '235', 'igrave' => '236', 'iacute' => '237', 'icirc' => '238', 'iuml' => '239', 'eth' => '240', 'ntilde' => '241', 'ograve' => '242', 'oacute' => '243', 'ocirc' => '244', 'otilde' => '245', 'ouml' => '246', 'divide' => '247', 'oslash' => '248', 'ugrave' => '249', 'uacute' => '250', 'ucirc' => '251', 'uuml' => '252', 'yacute' => '253', 'thorn' => '254', 'yuml' => '255');
-    if ($t[0] != '#') {
-        return ($C['and_mark'] ? "\x06" : '&').(isset($U[$t]) ? $t : (isset($N[$t]) ? (!$C['named_entity'] ? '#'.($C['hexdec_entity'] > 1 ? 'x'.dechex($N[$t]) : $N[$t]) : $t) : 'amp;'.$t)).';';
-    }
-    if (($n = ctype_digit($t = substr($t, 1)) ? intval($t) : hexdec(substr($t, 1))) < 9 or ($n > 13 && $n < 32) or $n == 11 or $n == 12 or ($n > 126 && $n < 160 && $n != 133) or ($n > 55295 && ($n < 57344 or ($n > 64975 && $n < 64992) or $n == 65534 or $n == 65535 or $n > 1114111))) {
-        return ($C['and_mark'] ? "\x06" : '&')."amp;#{$t};";
+    if ($t[0] !== '#') {
+        if (!$C['and_mark']) {
+            if (!isset($U[$t])) {
+                if (!isset($N[$t])) {
+                    return '&' . 'amp;' . $t . ';';
+                }
+                if (!$C['named_entity']) {
+                    if ($C['hexdec_entity'] <= 1) {
+                        return '&' . '#' . $N[$t] . ';';
+                    }
+                    return '&' . '#' . 'x' . dechex($N[$t]) . ';';
+                }
+                return '&' . $t . ';';
+            }
+            return '&' . $t . ';';
+        }
+        if (!isset($U[$t])) {
+            if (!isset($N[$t])) {
+                return "\x06" . 'amp;' . $t . ';';
+            }
+            if (!$C['named_entity']) {
+                if ($C['hexdec_entity'] <= 1) {
+                    return "\x06" . '#' . $N[$t] . ';';
+                }
+                return ("\x06") . ((('#' . ('x' . dechex($N[$t]))))) . ';';
+            }
+            return ("\x06") . ((($t))) . ';';
+        }
+        return ("\x06") . ($t) . ';';
     }
 
-    return ($C['and_mark'] ? "\x06" : '&').'#'.(((ctype_digit($t) && $C['hexdec_entity'] < 2) or !$C['hexdec_entity']) ? $n : 'x'.dechex($n)).';';
+    if (ctype_digit($t = substr($t, 1))) {
+        if (
+            ($n = (int)$t) < 9
+            or ($n > 13 && $n < 32)
+            or $n == 11
+            or $n == 12
+            or ($n > 126 && $n < 160 && $n != 133)
+            or (
+                $n > 55295
+                && (
+                    $n < 57344
+                    or ($n > 64975 && $n < 64992)
+                    or $n == 65534
+                    or $n == 65535
+                    or $n > 1114111
+                )
+            )
+        ) {
+            return ($C['and_mark'] ? "\x06" : '&') . "amp;#{$t};";
+        }
+    } elseif (
+        ($n = hexdec(substr($t, 1))) < 9
+        or ($n > 13 && $n < 32)
+        or $n == 11
+        or $n == 12
+        or ($n > 126 && $n < 160 && $n != 133)
+        or (
+            $n > 55295
+            && (
+                $n < 57344
+                or ($n > 64975 && $n < 64992)
+                or $n == 65534
+                or $n == 65535
+                or $n > 1114111
+            )
+        )
+    ) {
+        if (!$C['and_mark']) {
+            return '&' . "amp;#" . $t . ";";
+        }
+        return "\x06" . "amp;#" . $t . ";";
+    }
+
+    if (!$C['and_mark']) {
+        if ((ctype_digit($t) && $C['hexdec_entity'] < 2) or !$C['hexdec_entity']) {
+            return '&' . '#' . $n . ';';
+        }
+        return '&' . '#' . 'x' . dechex($n) . ';';
+    }
+    if ((ctype_digit($t) && $C['hexdec_entity'] < 2) or !$C['hexdec_entity']) {
+        return "\x06" . '#' . $n . ';';
+    }
+    return "\x06" . '#' . 'x' . dechex($n) . ';';
 }
 
 function hl_prot($p, $c = null) {
@@ -553,9 +697,9 @@ function hl_prot($p, $c = null) {
         if ($C['abs_url'] == -1 && strpos($p, $C['base_url']) === 0) { // Make url rel
             $p = substr($p, strlen($C['base_url']));
         } elseif (empty($m[1])) { // Make URL abs
-            if (substr($p, 0, 2) == '//') {
+            if (substr($p, 0, 2) === '//') {
                 $p = substr($C['base_url'], 0, strpos($C['base_url'], ':') + 1).$p;
-            } elseif ($p[0] == '/') {
+            } elseif ($p[0] === '/') {
                 $p = preg_replace('`(^.+?://[^/]+)(.*)`', '$1', $C['base_url']).$p;
             } elseif (strcspn($p, './')) {
                 $p = $C['base_url'].$p;
@@ -578,7 +722,7 @@ function hl_regex($p) {
     if (empty($p)) {
         return 0;
     }
-    if ($v = function_exists('error_clear_last') && function_exists('error_get_last')) {
+    if ($v = (function_exists('error_clear_last') && function_exists('error_get_last'))) {
         error_clear_last();
     } else {
         if ($t = ini_get('track_errors')) {
@@ -628,7 +772,7 @@ function hl_spec($t) {
             if (!preg_match('`^([a-z:\-\*]+)(?:\((.*?)\))?`i', $v, $m)) {
                 continue;
             }
-            if (($x = strtolower($m[1])) == '-*') {
+            if (($x = strtolower($m[1])) === '-*') {
                 $n['*'] = 1;
                 continue;
             }
@@ -645,7 +789,11 @@ function hl_spec($t) {
                     $y[$x] = 1;
                     continue;
                 }
-                $y[$x][strtolower(substr($m, 0, $p))] = str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08"), array(';', '|', '~', ' ', ',', '/', '(', ')'), substr($m, $p + 1));
+                $y[$x][strtolower(substr($m, 0, $p))] = str_replace(
+                    array("\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08"),
+                    array(';', '|', '~', ' ', ',', '/', '(', ')'),
+                    substr($m, $p + 1)
+                );
             }
             if (isset($y[$x]['match']) && !hl_regex($y[$x]['match'])) {
                 unset($y[$x]['match']);
@@ -686,15 +834,17 @@ function hl_tag($t) {
     global $C;
     $t = $t[0];
     // invalid < >
-    if ($t == '< ') {
+    if ($t === '< ') {
         return '&lt; ';
     }
-    if ($t == '>') {
+    if ($t === '>') {
         return '&gt;';
     }
     if (!preg_match('`^<(/?)([a-zA-Z][a-zA-Z1-6]*)([^>]*?)\s?>$`m', $t, $m)) {
         return str_replace(array('<', '>'), array('&lt;', '&gt;'), $t);
-    } elseif (!isset($C['elements'][($e = strtolower($m[2]))])) {
+    }
+
+    if (!isset($C['elements'][($e = strtolower($m[2]))])) {
         return ($C['keep_bad'] % 2) ? str_replace(array('<', '>'), array('&lt;', '&gt;'), $t) : '';
     }
     // attr string
@@ -710,7 +860,16 @@ function hl_tag($t) {
     // close tag
     static $eE = array('area' => 1, 'br' => 1, 'col' => 1, 'command' => 1, 'embed' => 1, 'hr' => 1, 'img' => 1, 'input' => 1, 'isindex' => 1, 'keygen' => 1, 'link' => 1, 'meta' => 1, 'param' => 1, 'source' => 1, 'track' => 1, 'wbr' => 1); // Empty ele
     if (!empty($m[1])) {
-        return !isset($eE[$e]) ? (empty($C['hook_tag']) ? "</$e>" : $C['hook_tag']($e)) : (($C['keep_bad']) % 2 ? str_replace(array('<', '>'), array('&lt;', '&gt;'), $t) : '');
+        if (!isset($eE[$e])) {
+            if (empty($C['hook_tag'])) {
+                return "</" . $e . ">";
+            }
+            return $C['hook_tag']($e);
+        }
+        if ($C['keep_bad'] % 2) {
+            return (str_replace(array('<', '>'), array('&lt;', '&gt;'), $t));
+        }
+        return '';
     }
 
     // open tag & attr
@@ -754,7 +913,7 @@ function hl_tag($t) {
                 }
                 break;
             case 1:
-                if ($a[0] == '=') { // =
+                if ($a[0] === '=') { // =
                     $w = 1;
                     $mode = 2;
                     $a = ltrim($a, '= ');
@@ -771,7 +930,7 @@ function hl_tag($t) {
                     $m = $m[1];
                     $w = 1;
                     $mode = 0;
-                    $aA[$nm] = trim(str_replace('<', '&lt;', ($m[0] == '"' or $m[0] == '\'') ? substr($m, 1, -1) : $m));
+                    $aA[$nm] = trim(str_replace('<', '&lt;', ($m[0] === '"' or $m[0] === '\'') ? substr($m, 1, -1) : $m));
                 }
                 break;
         }
@@ -794,19 +953,25 @@ function hl_tag($t) {
         if (((isset($d['*']) ? isset($d[$k]) : !isset($d[$k])) && (isset($aN[$k][$e]) or isset($aNU[$k]) or (isset($aNO[$k]) && !isset($d['on*'])) or (isset($aNA[$k]) && !isset($d['aria*'])) or (!isset($d['data*']) && preg_match('`data-((?!xml)[^:]+$)`', $k))) && !isset($rl['n'][$k]) && !isset($rl['n']['*'])) or isset($rl[$k])) {
             if (isset($aNE[$k])) {
                 $v = $k;
-            } elseif (!empty($lcase) && (($e != 'button' or $e != 'input') or $k == 'type')) { // Rather loose but ?not cause issues
+            } elseif (!empty($lcase) && (($e !== 'button' or $e !== 'input') or $k === 'type')) { // Rather loose but ?not cause issues
                 $v = (isset($aNL[($v2 = strtolower($v))])) ? $v2 : $v;
             }
-            if ($k == 'style' && !$C['style_pass']) {
+            if ($k === 'style' && !$C['style_pass']) {
                 if (false !== strpos($v, '&#')) {
                     static $sC = array('&#x20;' => ' ', '&#32;' => ' ', '&#x45;' => 'e', '&#69;' => 'e', '&#x65;' => 'e', '&#101;' => 'e', '&#x58;' => 'x', '&#88;' => 'x', '&#x78;' => 'x', '&#120;' => 'x', '&#x50;' => 'p', '&#80;' => 'p', '&#x70;' => 'p', '&#112;' => 'p', '&#x53;' => 's', '&#83;' => 's', '&#x73;' => 's', '&#115;' => 's', '&#x49;' => 'i', '&#73;' => 'i', '&#x69;' => 'i', '&#105;' => 'i', '&#x4f;' => 'o', '&#79;' => 'o', '&#x6f;' => 'o', '&#111;' => 'o', '&#x4e;' => 'n', '&#78;' => 'n', '&#x6e;' => 'n', '&#110;' => 'n', '&#x55;' => 'u', '&#85;' => 'u', '&#x75;' => 'u', '&#117;' => 'u', '&#x52;' => 'r', '&#82;' => 'r', '&#x72;' => 'r', '&#114;' => 'r', '&#x4c;' => 'l', '&#76;' => 'l', '&#x6c;' => 'l', '&#108;' => 'l', '&#x28;' => '(', '&#40;' => '(', '&#x29;' => ')', '&#41;' => ')', '&#x20;' => ':', '&#32;' => ':', '&#x22;' => '"', '&#34;' => '"', '&#x27;' => "'", '&#39;' => "'", '&#x2f;' => '/', '&#47;' => '/', '&#x2a;' => '*', '&#42;' => '*', '&#x5c;' => '\\', '&#92;' => '\\');
                     $v = strtr($v, $sC);
                 }
-                $v = preg_replace_callback('`(url(?:\()(?: )*(?:\'|"|&(?:quot|apos);)?)(.+?)((?:\'|"|&(?:quot|apos);)?(?: )*(?:\)))`iS', 'hl_prot', $v);
-                $v = !$C['css_expression'] ? preg_replace('`expression`i', ' ', preg_replace('`\\\\\S|(/|(%2f))(\*|(%2a))`i', ' ', $v)) : $v;
+                $v = preg_replace_callback(
+                    '`(url(?:\()(?: )*(?:\'|"|&(?:quot|apos);)?)(.+?)((?:\'|"|&(?:quot|apos);)?(?: )*(?:\)))`iS',
+                    'hl_prot',
+                    $v
+                );
+                if (!$C['css_expression']) {
+                    $v = str_ireplace('expression', ' ', preg_replace('`\\\\\S|(/|(%2f))(\*|(%2a))`i', ' ', $v));
+                }
             } elseif (isset($aNP[$k]) or isset($aNO[$k])) {
                 $v = str_replace('­', ' ', (strpos($v, '&') !== false ? str_replace(array('&#xad;', '&#173;', '&shy;'), ' ', $v) : $v)); // double-quoted char: soft-hyphen; appears here as "­" or hyphen or something else depending on viewing software
-                if ($k == 'srcset') {
+                if ($k === 'srcset') {
                     $v2 = '';
                     foreach (explode(',', $v) as $k1 => $v1) {
                         $v1 = explode(' ', ltrim($v1), 2);
@@ -818,7 +983,7 @@ function hl_tag($t) {
                     }
                     $v = trim($v2, ', ');
                 }
-                if ($k == 'itemtype') {
+                if ($k === 'itemtype') {
                     $v2 = '';
                     foreach (explode(' ', $v) as $v1) {
                         if (isset($v1[0])) {
@@ -829,7 +994,7 @@ function hl_tag($t) {
                 } else {
                     $v = hl_prot($v, $k);
                 }
-                if ($k == 'href') { // X-spam
+                if ($k === 'href') { // X-spam
                     if ($C['anti_mail_spam'] && strpos($v, 'mailto:') === 0) {
                         $v = str_replace('@', htmlspecialchars($C['anti_mail_spam']), $v);
                     } elseif ($C['anti_link_spam']) {
@@ -878,63 +1043,63 @@ function hl_tag($t) {
     if ($depTr) {
         $c = array();
         foreach ($a as $k => $v) {
-            if ($k == 'style' or !isset($aND[$k][$e])) {
+            if ($k === 'style' or !isset($aND[$k][$e])) {
                 continue;
             }
             $v = str_replace(array('\\', ':', ';', '&#'), '', $v);
-            if ($k == 'align') {
+            if ($k === 'align') {
                 unset($a['align']);
-                if ($e == 'img' && ($v == 'left' or $v == 'right')) {
+                if ($e === 'img' && ($v === 'left' or $v === 'right')) {
                     $c[] = 'float: '.$v;
-                } elseif (($e == 'div' or $e == 'table') && $v == 'center') {
+                } elseif (($e === 'div' or $e === 'table') && $v === 'center') {
                     $c[] = 'margin: auto';
                 } else {
                     $c[] = 'text-align: '.$v;
                 }
-            } elseif ($k == 'bgcolor') {
+            } elseif ($k === 'bgcolor') {
                 unset($a['bgcolor']);
                 $c[] = 'background-color: '.$v;
-            } elseif ($k == 'border') {
+            } elseif ($k === 'border') {
                 unset($a['border']);
                 $c[] = "border: {$v}px";
-            } elseif ($k == 'bordercolor') {
+            } elseif ($k === 'bordercolor') {
                 unset($a['bordercolor']);
                 $c[] = 'border-color: '.$v;
-            } elseif ($k == 'cellspacing') {
+            } elseif ($k === 'cellspacing') {
                 unset($a['cellspacing']);
                 $c[] = "border-spacing: {$v}px";
-            } elseif ($k == 'clear') {
+            } elseif ($k === 'clear') {
                 unset($a['clear']);
-                $c[] = 'clear: '.($v != 'all' ? $v : 'both');
-            } elseif ($k == 'compact') {
+                $c[] = 'clear: '.($v !== 'all' ? $v : 'both');
+            } elseif ($k === 'compact') {
                 unset($a['compact']);
                 $c[] = 'font-size: 85%';
-            } elseif ($k == 'height' or $k == 'width') {
+            } elseif ($k === 'height' or $k === 'width') {
                 unset($a[$k]);
-                $c[] = $k.': '.($v[0] != '*' ? $v.(ctype_digit($v) ? 'px' : '') : 'auto');
-            } elseif ($k == 'hspace') {
+                $c[] = $k.': '.($v[0] !== '*' ? $v.(ctype_digit($v) ? 'px' : '') : 'auto');
+            } elseif ($k === 'hspace') {
                 unset($a['hspace']);
                 $c[] = "margin-left: {$v}px; margin-right: {$v}px";
-            } elseif ($k == 'language' && !isset($a['type'])) {
+            } elseif ($k === 'language' && !isset($a['type'])) {
                 unset($a['language']);
                 $a['type'] = 'text/'.strtolower($v);
-            } elseif ($k == 'name') {
-                if ($C['no_deprecated_attr'] == 2 or ($e != 'a' && $e != 'map')) {
+            } elseif ($k === 'name') {
+                if ($C['no_deprecated_attr'] == 2 or ($e !== 'a' && $e !== 'map')) {
                     unset($a['name']);
                 }
                 if (!isset($a['id']) && !preg_match('`\W`', $v)) {
                     $a['id'] = $v;
                 }
-            } elseif ($k == 'noshade') {
+            } elseif ($k === 'noshade') {
                 unset($a['noshade']);
                 $c[] = 'border-style: none; border: 0; background-color: gray; color: gray';
-            } elseif ($k == 'nowrap') {
+            } elseif ($k === 'nowrap') {
                 unset($a['nowrap']);
                 $c[] = 'white-space: nowrap';
-            } elseif ($k == 'size') {
+            } elseif ($k === 'size') {
                 unset($a['size']);
                 $c[] = 'size: '.$v.'px';
-            } elseif ($k == 'vspace') {
+            } elseif ($k === 'vspace') {
                 unset($a['vspace']);
                 $c[] = "margin-top: {$v}px; margin-bottom: {$v}px";
             }
@@ -973,40 +1138,43 @@ function hl_tag($t) {
             $aA .= " {$k}=\"{$v}\"";
         }
 
-        return "<{$e}{$aA}".(isset($eE[$e]) ? ' /' : '').'>';
-    } else {
-        return $C['hook_tag']($e, $a);
+        return "<" . $e . $aA .(isset($eE[$e]) ? ' /' : '').'>';
     }
+    return $C['hook_tag']($e, $a);
 }
 
 function hl_tag2(&$e, &$a, $t = 1) {
     // transform tag
-    if ($e == 'big') {
+    if ($e === 'big') {
         $e = 'span';
 
         return 'font-size: larger;';
     }
-    if ($e == 's' or $e == 'strike') {
+    if ($e === 's' or $e === 'strike') {
         $e = 'span';
 
         return 'text-decoration: line-through;';
     }
-    if ($e == 'tt') {
+    if ($e === 'tt') {
         $e = 'code';
 
         return '';
     }
-    if ($e == 'center') {
+    if ($e === 'center') {
         $e = 'div';
 
         return 'text-align: center;';
     }
     static $fs = array('0' => 'xx-small', '1' => 'xx-small', '2' => 'small', '3' => 'medium', '4' => 'large', '5' => 'x-large', '6' => 'xx-large', '7' => '300%', '-1' => 'smaller', '-2' => '60%', '+1' => 'larger', '+2' => '150%', '+3' => '200%', '+4' => '300%');
-    if ($e == 'font') {
+    if ($e === 'font') {
         $a2 = '';
         while (preg_match('`(^|\s)(color|size)\s*=\s*(\'|")?(.+?)(\\3|\s|$)`i', $a, $m)) {
             $a = str_replace($m[0], ' ', $a);
-            $a2 .= strtolower($m[2]) == 'color' ? (' color: '.str_replace(array('"', ';', ':'), '\'', trim($m[4])).';') : (isset($fs[($m = trim($m[4]))]) ? (' font-size: '.$fs[$m].';') : '');
+            if (strtolower($m[2]) === 'color') {
+                $a2 .= ' color: ' . str_replace(array('"', ';', ':'), '\'', trim($m[4])) . ';';
+            } else {
+                $a2 .= isset($fs[($m = trim($m[4]))]) ? (' font-size: ' . $fs[$m] . ';') : '';
+            }
         }
         while (preg_match('`(^|\s)face\s*=\s*(\'|")?([^=]+?)\\2`i', $a, $m) or preg_match('`(^|\s)face\s*=(\s*)(\S+)`i', $a, $m)) {
             $a = str_replace($m[0], ' ', $a);
@@ -1016,12 +1184,12 @@ function hl_tag2(&$e, &$a, $t = 1) {
 
         return ltrim(str_replace('<', '', $a2));
     }
-    if ($e == 'acronym') {
+    if ($e === 'acronym') {
         $e = 'abbr';
 
         return '';
     }
-    if ($e == 'dir') {
+    if ($e === 'dir') {
         $e = 'ul';
 
         return '';
@@ -1050,7 +1218,7 @@ function hl_tidy($t, $w, $p) {
         return str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), array('<', '>', "\n", "\r", "\t", ' '), $t);
     }
     $s = strpos(" $w", 't') ? "\t" : ' ';
-    $s = preg_match('`\d`', $w, $m) ? str_repeat($s, $m[0]) : str_repeat($s, ($s == "\t" ? 1 : 2));
+    $s = preg_match('`\d`', $w, $m) ? str_repeat($s, $m[0]) : str_repeat($s, ($s === "\t" ? 1 : 2));
     $N = preg_match('`[ts]([1-9])`', $w, $m) ? $m[1] : 0;
     $a = array('br' => 1);
     $b = array('button' => 1, 'command' => 1, 'input' => 1, 'option' => 1, 'param' => 1, 'track' => 1);
@@ -1069,8 +1237,20 @@ function hl_tidy($t, $w, $p) {
         for ($i = -1, $j = count($t); ++$i < $j;) {
             $r = '';
             list($e, $r) = explode('>', $t[$i]);
-            $x = $e[0] == '/' ? 0 : (substr($e, -1) == '/' ? 1 : ($e[0] != '!' ? 2 : -1));
-            $y = !$x ? ltrim($e, '/') : ($x > 0 ? substr($e, 0, strcspn($e, ' ')) : 0);
+            if ($e[0] === '/') {
+                $x = 0;
+            } else {
+                if (substr($e, -1) === '/') {
+                    $x = 1;
+                } else {
+                    $x = $e[0] !== '!' ? 2 : -1;
+                }
+            }
+            if (!$x) {
+                $y = ltrim($e, '/');
+            } else {
+                $y = ($x > 0 ? substr($e, 0, strcspn($e, ' ')) : 0);
+            }
             $e = "<$e>";
             if (isset($d[$y])) {
                 if (!$x) {
@@ -1106,10 +1286,15 @@ function hl_tidy($t, $w, $p) {
         }
         $X = 0;
     }
-    $t = str_replace(array("\n ", " \n"), "\n", preg_replace('`[\n]\s*?[\n]+`', "\n", ob_get_contents()));
-    ob_end_clean();
-    if (($l = strpos(" $w", 'r') ? (strpos(" $w", 'n') ? "\r\n" : "\r") : 0)) {
-        $t = str_replace("\n", $l, $t);
+    $t = str_replace(array("\n ", " \n"), "\n", preg_replace('`[\n]\s*?[\n]+`', "\n", ob_get_clean()));
+    if (strpos(" $w", 'r')) {
+        if ($l = (strpos(" $w", 'n') ? "\r\n" : "\r")) {
+            $t = str_replace("\n", $l, $t);
+        }
+    } else {
+        if ($l = 0) {
+            $t = str_replace("\n", $l, $t);
+        }
     }
 
     return str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), array('<', '>', "\n", "\r", "\t", ' '), $t);
