@@ -697,7 +697,9 @@ function hl_tag($t) {
     }
     if (!preg_match('`^<(/?)([a-zA-Z][a-zA-Z1-6]*)([^>]*?)\s?>$`m', $t, $m)) {
         return str_replace(array('<', '>'), array('&lt;', '&gt;'), $t);
-    } elseif (!isset($C['elements'][($e = strtolower($m[2]))])) {
+    }
+
+    if (!isset($C['elements'][($e = strtolower($m[2]))])) {
         return ($C['keep_bad'] % 2) ? str_replace(array('<', '>'), array('&lt;', '&gt;'), $t) : '';
     }
     // attr string
@@ -977,9 +979,8 @@ function hl_tag($t) {
         }
 
         return "<{$e}{$aA}".(isset($eE[$e]) ? ' /' : '').'>';
-    } else {
-        return $C['hook_tag']($e, $a);
     }
+    return $C['hook_tag']($e, $a);
 }
 
 function hl_tag2(&$e, &$a, $t = 1) {
