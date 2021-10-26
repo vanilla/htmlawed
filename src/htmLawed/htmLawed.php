@@ -10,7 +10,9 @@ See htmLawed_README.txt/htm
 */
 
 function htmLawed($t, $C = 1, $S = array()) {
-    $C = is_array($C) ? $C : array();
+    if (!is_array($C)) {
+        $C = array();
+    }
     if (!empty($C['valid_xhtml'])) {
         $C['elements'] = empty($C['elements']) ? '*-acronym-big-center-dir-font-isindex-s-strike-tt' : $C['elements'];
         $C['make_tag_strict'] = isset($C['make_tag_strict']) ? $C['make_tag_strict'] : 2;
@@ -76,9 +78,13 @@ function htmLawed($t, $C = 1, $S = array()) {
     $C['anti_link_spam'] = (isset($C['anti_link_spam']) && is_array($C['anti_link_spam']) && count($C['anti_link_spam']) == 2 && (empty($C['anti_link_spam'][0]) or hl_regex($C['anti_link_spam'][0])) && (empty($C['anti_link_spam'][1]) or hl_regex($C['anti_link_spam'][1]))) ? $C['anti_link_spam'] : 0;
     $C['anti_mail_spam'] = isset($C['anti_mail_spam']) ? $C['anti_mail_spam'] : 0;
     $C['balance'] = isset($C['balance']) ? (bool)$C['balance'] : 1;
-    $C['cdata'] = isset($C['cdata']) ? $C['cdata'] : (empty($C['safe']) ? 3 : 0);
+    if (!isset($C['cdata'])) {
+        $C['cdata'] = empty($C['safe']) ? 3 : 0;
+    }
     $C['clean_ms_char'] = empty($C['clean_ms_char']) ? 0 : $C['clean_ms_char'];
-    $C['comment'] = isset($C['comment']) ? $C['comment'] : (empty($C['safe']) ? 3 : 0);
+    if (!isset($C['comment'])) {
+        $C['comment'] = empty($C['safe']) ? 3 : 0;
+    }
     $C['css_expression'] = empty($C['css_expression']) ? 0 : 1;
     $C['direct_list_nest'] = empty($C['direct_list_nest']) ? 0 : 1;
     $C['hexdec_entity'] = isset($C['hexdec_entity']) ? $C['hexdec_entity'] : 1;
