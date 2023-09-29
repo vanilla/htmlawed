@@ -8,13 +8,14 @@
 namespace Htmlawed\Tests;
 
 use Htmlawed;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the default config and spec for {@link \Htmlawed::filter()}.
  *
  * Calling the HTML filter without overriding the config should offer reasonable protection.
  */
-class DefaultsTest extends \PHPUnit_Framework_TestCase {
+class DefaultsTest extends TestCase {
     protected function assertFiltered($expected, $html, $message = '') {
         $filtered = Htmlawed::filter($html);
         $this->assertSame($expected, $filtered, $message);

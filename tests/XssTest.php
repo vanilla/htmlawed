@@ -8,12 +8,13 @@
 namespace Htmlawed\Tests;
 
 use Htmlawed;
+use PHPUnit\Framework\TestCase;
 use pQuery;
 
 /**
  * Test some xss strings.
  */
-class XssTest extends \PHPUnit_Framework_TestCase {
+class XssTest extends TestCase {
     /**
      * Assert that a string doesn't have a script tag.
      *
@@ -290,7 +291,7 @@ HTML;
 
         $result = [];
         foreach ($lines as $line) {
-            list($key, $value) = explode("\n", $line, 2);
+            [$key, $value] = explode("\n", $line, 2);
             $result[$key] = [$value];
         }
 

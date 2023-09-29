@@ -8,29 +8,30 @@
 namespace Htmlawed\Tests;
 
 use Htmlawed;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for valid html.
  */
-class ValidTest extends \PHPUnit_Framework_TestCase {
+class ValidTest extends TestCase {
     /**
      * Test that valid html does not change when filtered.
      *
-     * @param $html The html to test.
+     * @param string $html The html to test.
      * @dataProvider provideValid
      */
-    public function testValidNoChange($html) {
+    public function testValidNoChange(string $html) {
         $filtered = Htmlawed::filter($html);
         $this->assertEquals($html, $filtered);
     }
 
     public function testSpanStrip() {
         $html = <<<HTML
-<span><h1>Don't strip this h1!</h1></span>
+<h1><span>Don't strip this h1!</span></h1>
 HTML;
 
         $filtered = Htmlawed::filter($html);
-        $expected = '<h1>Don\'t strip this h1!</h1>';
+        $expected = '<h1><span>Don\'t strip this h1!</span></h1>';
         $this->assertSame($expected, $filtered);
     }
 
@@ -44,4 +45,3 @@ HTML;
         return $result;
     }
 }
- 

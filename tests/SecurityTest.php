@@ -8,11 +8,12 @@
 namespace Htmlawed\Tests;
 
 use Htmlawed;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test issues that come up on Github.
  */
-class SecurityTest extends \PHPUnit_Framework_TestCase {
+class SecurityTest extends TestCase {
 
     /**
      * Test deprecated attribute.
