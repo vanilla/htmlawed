@@ -26,4 +26,21 @@ class SecurityTest extends TestCase {
         $filtered = Htmlawed::filter($html);
         $this->assertSame($expected, $filtered);
     }
+
+    /**
+     * Test that data attributes are properly sanitized.
+     *
+     * @link https://higherlogic.atlassian.net/browse/VNLA-5166
+     *
+     * @return void
+     */
+    public function testOddlyNestedDataAttribute() {
+        $html = <<<HTML
+<a data-<a  <a data-%a0id='z <b onmouseover=self[&apos;con&apos;+&apos;firm&apos;](&apos;hehe&apos;) style=position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0, 0, 0, 0.0);z-index: 5000;'href="#xss">click here</a>
+HTML;
+        $expected = "a data-click here";
+
+        $filtered = Htmlawed::filter($html);
+        $this->assertSame($expected, $filtered);
+    }
 }
