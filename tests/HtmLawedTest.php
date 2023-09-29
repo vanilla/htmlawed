@@ -9,11 +9,12 @@
 namespace Htmlawed\Tests;
 
 use Htmlawed;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Run some test cases from htmLawed_TESTCASE.txt file.
  */
-class HtmLawedTest extends \PHPUnit_Framework_TestCase {
+class HtmLawedTest extends TestCase {
 
     /**
      * Test some HTML attribute tests.
@@ -91,7 +92,7 @@ src=&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#1
             7 => ['<div style="background-image:url(&quot;javascript:alert(\'xss\')&quot; );"></div>', '<div style="background-image:url(&quot;denied:javascript:alert(\'xss\')&quot; );"></div>'],
             8 => ['<!--[if gte IE 4]><script>alert(\'xss\');</script><![endif]-->', ''],
             9 => ['<script a=">" src="http://ha.ckers.org/xss.js"></script>', '" src="http://ha.ckers.org/xss.js"&gt;'],
-            10 => ['<div style="background-image: &#117;r&#x6C;(\'js&#58;xss\'&#x29;"></div>', '<div style="background-image: url(\'denied:js&#58;xss\')"></div>'],
+            10 => ['<div style="background-image: &#117;r&#x6C;(\'js&#58;xss\'&#x29;"></div>', '<div style="background-image: url(\'denied:js:xss\')"></div>'],
             11 => ['<a style=";-moz-binding:url(http://lukasz.pilorz.net/xss/xss.xml#xss)" href="http://example.com">test</a>', '<a style=";-moz-binding:url(denied:http://lukasz.pilorz.net/xss/xss.xml#xss)" href="http://example.com">test</a>'],
             12 => ['<a href="http://x&x=%22+style%3d%22background-image%3a+expression%28alert
 %28%27xss%3f%29%29">x</a>', '<a href="http://x&amp;x=%22+style%3d%22background-image%3a+expression%28alert %28%27xss%3f%29%29">x</a>'],

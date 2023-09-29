@@ -8,11 +8,12 @@
 namespace Htmlawed\Tests;
 
 use Htmlawed;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test issues that come up on Github.
  */
-class IssuesTest extends \PHPUnit_Framework_TestCase {
+class IssuesTest extends TestCase {
     /**
      * Test overly aggressive span stripping.
      *
@@ -22,7 +23,7 @@ class IssuesTest extends \PHPUnit_Framework_TestCase {
         $html = '<span style="expression(alert(\'XSS\')">foo</span>';
         $expected = 'foo';
 
-        $config = ['deny_attribute' => 'on*,style'] + Htmlawed::$defaultConfig;
+        $config = ['deny_attribute' => 'on*,style', 'elements' => '*-span'] + Htmlawed::$defaultConfig;
         $filtered = Htmlawed::filter($html, $config);
         $this->assertSame($expected, $filtered);
     }

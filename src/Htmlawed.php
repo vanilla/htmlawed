@@ -15,6 +15,7 @@ class Htmlawed {
         'anti_link_spam' => ['`.`', ''],
         'balance' => 1,
         'cdata' => 3,
+        'safe' => 1,
         'comment' => 1,
         'css_expression' => 0,
         'deny_attribute' => 'on*,style',
